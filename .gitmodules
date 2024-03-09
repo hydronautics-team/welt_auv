@@ -1,0 +1,3 @@
+[submodule "src/sauvc"]
+	path = src/sauvc
+	url = git@github.com:hydronautics-team/sauvc.git
