@@ -11,6 +11,7 @@
             "includePath": [
                 "/opt/ros/iron/include/**",
                 "/usr/include/**",
+                "${workspaceFolder}/src/welt_communication/include",
                 "${workspaceFolder}/src/sauvc/src/stingray/src/stingray_movement/include",
                 "${workspaceFolder}/src/sauvc/src/stingray/src/stingray_utils/include",
                 "${workspaceFolder}/src/sauvc/src/stingray/src/stingray_core/src/stingray_core_communication/include",

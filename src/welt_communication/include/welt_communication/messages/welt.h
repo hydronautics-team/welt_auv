@@ -1,10 +1,10 @@
-#ifndef STINGRAY_MESSAGES_NORMAL_H
-#define STINGRAY_MESSAGES_NORMAL_H
+#ifndef STINGRAY_MESSAGES_WELT_H
+#define STINGRAY_MESSAGES_WELT_H
 
 #include "stingray_core_communication/messages/common.h"
 
-// pult -> cm4 -> stm
-struct WeltMessage : public AbstractMessage {
+class WeltMessage : public AbstractMessage {
+public:
     WeltMessage();
 
     const static uint8_t length = 33; // 31(message) + 2(checksum) = 31 dyte
@@ -30,4 +30,4 @@ struct WeltMessage : public AbstractMessage {
     bool parse(std::vector<uint8_t> &input) override; // pult to raspberry_cm4
 };
 
-#endif  // STINGRAY_MESSAGES_NORMAL_H
+#endif  // STINGRAY_MESSAGES_WELT_H
