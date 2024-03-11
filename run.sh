@@ -1,1 +1,1 @@
-ros2 launch welt_launch main.launch.py
+ros2 launch welt_launch main.launch.py front_camera_path:=/dev/video4

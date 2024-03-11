@@ -17,6 +17,9 @@ def generate_launch_description():
     front_camera_topic_arg = DeclareLaunchArgument(
         "front_camera_topic", default_value='/stingray/topics/front_camera'
     )
+    front_camera_path_arg = DeclareLaunchArgument(
+        "front_camera_path", default_value='/dev/video4'
+    )
     transition_srv_arg = DeclareLaunchArgument(
         "transition_srv", default_value='/stingray/services/transition'
     )
@@ -47,6 +50,7 @@ def generate_launch_description():
     # load ros config
     return LaunchDescription([
         front_camera_topic_arg,
+        front_camera_path_arg,
         transition_srv_arg,
         zbar_topic_arg,
         twist_action_arg,
@@ -117,6 +121,10 @@ def generate_launch_description():
             name='camera_driver',
             remappings=[
                 ('/image_raw', LaunchConfiguration("front_camera_topic")),
+            ],
+            parameters=[
+                {'video_device': LaunchConfiguration("front_camera_path")},
+                # {'camera_name': "/front"},
             ],
             respawn=True,
             respawn_delay=1,
