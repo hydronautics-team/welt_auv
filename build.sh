@@ -1,1 +1,1 @@
-colcon build --packages-select stingray_launch stingray_interfaces stingray_core_interfaces stingray_core_launch stingray_core_communication serial sauvc_launch stingray_utils welt_communication welt_launch
+colcon build --packages-select welt_communication welt_launch stingray_interfaces stingray_missions stingray_utils stingray_launch stingray_movement zbar_ros serial stingray_core_communication stingray_core_interfaces stingray_core_launch
