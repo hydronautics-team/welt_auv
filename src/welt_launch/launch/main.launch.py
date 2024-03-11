@@ -129,15 +129,33 @@ def generate_launch_description():
             respawn=True,
             respawn_delay=1,
         ),
-        Node(
-            package='rqt_gui',
-            executable='rqt_gui',
-            name='rqt_gui',
-        ),
+        # Node(
+        #     package='rqt_gui',
+        #     executable='rqt_gui',
+        #     name='rqt_gui',
+        # ),
         Node(
             package='welt_communication',
             executable='hardware_bridge_node',
             name='hardware_bridge_node',
+            respawn=True,
+            respawn_delay=0.5,
+        ),
+        # Node(
+        #     package='stingray_core_communication',
+        #     executable='hardware_bridge_node',
+        #     name='hardware_bridge_node',
+        #     respawn=True,
+        #     respawn_delay=0.5,
+        # ),
+        Node(
+            package='welt_communication',
+            executable='uart_driver_node',
+            name='uart_driver_node',
+            parameters=[
+                {'device': "/dev/ttyTHS0"},
+                {'baudrate': 115200},
+            ],
             respawn=True,
             respawn_delay=0.5,
         ),
