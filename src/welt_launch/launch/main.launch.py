@@ -24,7 +24,7 @@ def generate_launch_description():
 
     # missions
     package_names_arg = DeclareLaunchArgument(
-        "package_names", default_value='stingray_missions stingray_missions'
+        "package_names", default_value='stingray_missions sauvc_missions'
     )
     transition_srv_arg = DeclareLaunchArgument(
         "transition_srv", default_value='/stingray/services/transition'
