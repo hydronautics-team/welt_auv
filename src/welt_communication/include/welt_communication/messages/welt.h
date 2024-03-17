@@ -8,6 +8,7 @@ public:
     WeltMessage();
 
     const static uint8_t length = 33; // 31(message) + 2(checksum) = 31 dyte
+    static const uint8_t dev_amount = 2;
 
     uint8_t reset_imu;
     uint8_t stab_depth;
@@ -20,8 +21,8 @@ public:
     float roll;
     float pitch;
     float yaw;
-    int8_t dropper;
-    int8_t grabber;
+    int8_t dev[dev_amount];
+
 
     uint16_t checksum;
     // parsel end

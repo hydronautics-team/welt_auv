@@ -30,9 +30,9 @@ def generate_launch_description():
             executable='udp_driver_node',
             name='udp_driver_node',
             parameters=[
-                {'send_to_ip': '192.168.1.11'},
+                {'send_to_ip': '10.42.0.111'},
                 {'send_to_port': 13053},
-                {'receive_from_ip': "192.168.1.173"},
+                {'receive_from_ip': "10.42.0.186"},
                 {'receive_from_port': 13050},
             ],
             respawn=True,
