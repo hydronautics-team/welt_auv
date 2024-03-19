@@ -14,14 +14,6 @@ from launch_ros.actions import PushRosNamespace
 
 
 def generate_launch_description():
-    # camera
-    front_camera_topic_arg = DeclareLaunchArgument(
-        "front_camera_topic", default_value='/stingray/topics/front_camera'
-    )
-    front_camera_path_arg = DeclareLaunchArgument(
-        "front_camera_path", default_value='/dev/video0'
-    )
-
     # missions
     package_names_arg = DeclareLaunchArgument(
         "package_names", default_value='stingray_missions sauvc_missions'
@@ -133,95 +125,24 @@ def generate_launch_description():
         send_to_port_arg,
         receive_from_ip_arg,
         receive_from_port_arg,
-        Node(
-            package='stingray_missions',
-            executable='fsm_node',
-            name='fsm_node',
-            parameters=[
-                {'package_names': LaunchConfiguration("package_names")},
-                {'transition_srv': LaunchConfiguration("transition_srv")},
-                {'twist_action': LaunchConfiguration("twist_action")},
-                {'device_action': LaunchConfiguration("device_action")},
-                {'reset_imu_srv': LaunchConfiguration("reset_imu_srv")},
-                {'set_stabilization_srv': LaunchConfiguration(
-                    "set_stabilization_srv")},
-            ],
-            respawn=True,
-            respawn_delay=1,
-        ),
-        Node(
-            package='stingray_movement',
-            executable='twist_action_server',
-            name='twist_action_server',
-            parameters=[
-                {'twist_action': LaunchConfiguration("twist_action")},
-                {'uv_state_topic': LaunchConfiguration("uv_state_topic")},
-                {'set_twist_srv': LaunchConfiguration("set_twist_srv")},
-            ],
-            respawn=True,
-            respawn_delay=1,
-        ),
-        # Node(
-        #     package='stingray_devices',
-        #     executable='device_action_server',
-        #     name='device_action_server',
-        #     parameters=[
-        #         {'device_action': LaunchConfiguration("device_action")},
-        #         {'device_state_array_topic': LaunchConfiguration(
-        #             "device_state_array_topic")},
-        #         {'set_device_srv': LaunchConfiguration("set_device_srv")},
-        #     ],
-        #     respawn=True,
-        #     respawn_delay=1,
-        # ),
-        Node(
-            package='stingray_missions',
-            executable='qr_trigger_node',
-            name='qr_trigger_node',
-            parameters=[
-                {'transition_srv': LaunchConfiguration("transition_srv")},
-                {'zbar_topic': LaunchConfiguration("zbar_topic")}
-            ],
-            respawn=True,
-            respawn_delay=1,
-        ),
-        Node(
-            package='zbar_ros',
-            executable='barcode_reader',
-            name='qr_reader',
-            remappings=[
-                ('/image', LaunchConfiguration("front_camera_topic")),
-                ('/barcode', LaunchConfiguration("zbar_topic")),
-            ],
-            respawn=True,
-            respawn_delay=1,
-        ),
-        # Node(
-        #     package='stingray_object_detection',
-        #     executable='yolov5_detector',
-        #     name='yolov5_detector',
-        #     parameters=[
-        #         {'weights_pkg_name': LaunchConfiguration("weights_pkg_name")},
-        #         {'image_topic_list': LaunchConfiguration("image_topic_list")},
-        #         {'set_enable_object_detection_srv': LaunchConfiguration("set_enable_object_detection_srv")},
-        #         {'debug': LaunchConfiguration("debug")},
-        #     ],
-        #     respawn=True,
-        #     respawn_delay=1,
-        # ),
-        Node(
-            package='usb_cam',
-            executable='usb_cam_node_exe',
-            name='camera_driver',
-            remappings=[
-                ('/image_raw', LaunchConfiguration("front_camera_topic")),
-            ],
-            parameters=[
-                {'video_device': LaunchConfiguration("front_camera_path")},
-                # {'camera_name': "/front"},
-            ],
-            respawn=True,
-            respawn_delay=1,
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(str(Path(
+                get_package_share_directory('stingray_core_launch'), 'uart.launch.py'))),
+            launch_arguments={
+                'driver_request_topic': LaunchConfiguration("driver_request_topic"),
+                'uv_state_topic': LaunchConfiguration("uv_state_topic"),
+                'device_state_array_topic': LaunchConfiguration("device_state_array_topic"),
+                'driver_response_topic': LaunchConfiguration("driver_response_topic"),
+                'set_twist_srv': LaunchConfiguration("set_twist_srv"),
+                'set_stabilization_srv': LaunchConfiguration("set_stabilization_srv"),
+                'reset_imu_srv': LaunchConfiguration("reset_imu_srv"),
+                'enable_thrusters_srv': LaunchConfiguration("enable_thrusters_srv"),
+                'set_device_srv': LaunchConfiguration("set_device_srv"),
+                'driver_request_topic': LaunchConfiguration("driver_request_topic"),
+                'driver_response_topic': LaunchConfiguration("driver_response_topic"),
+                'device': LaunchConfiguration("device"),
+                'baudrate': LaunchConfiguration("baudrate"),
+            }.items(),
         ),
         Node(
             package='welt_communication',
