@@ -1,1 +1,1 @@
-colcon build --packages-ignore marker_finder
+colcon build --packages-ignore marker_finder serial
