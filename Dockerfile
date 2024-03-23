@@ -10,6 +10,7 @@ RUN apt-get install -y python3-requests build-essential libatlas-base-dev gfortr
 RUN pip3 install scipy
 # RUN pip3 uninstall -y pillow
 # RUN pip3 install "pillow<7"
+RUN pip3 install ipython
 RUN pip3 install seaborn
 RUN pip3 install matplotlib
 # RUN pip3 install "matplotlib>=3.2.2,<4"
@@ -36,11 +37,14 @@ RUN apt-get install -y 	ffmpeg libyaml-cpp-dev
 RUN git clone -b iron https://github.com/ros-perception/image_common.git
 RUN apt-get install -y 	libogg-dev libtheora-dev
 RUN git clone -b iron https://github.com/ros-perception/image_transport_plugins.git
-RUN git clone -b ros2 https://github.com/ros-drivers/usb_cam.git
 
 WORKDIR /additional_packages_ws
-RUN rosdep update
-RUN source /additional_packages_ws/install/setup.bash &&  rosdep install --from-paths src --ignore-src -y
+RUN /bin/bash -c "source /opt/ros/iron/install/setup.bash && colcon build"
+WORKDIR /additional_packages_ws/src
+RUN git clone -b 0.7.0 https://github.com/ros-drivers/usb_cam.git
+# RUN rosdep update
+# RUN /bin/bash -c "source /additional_packages_ws/install/setup.bash &&  rosdep install --from-paths src --ignore-src -y"
+WORKDIR /additional_packages_ws
 RUN /bin/bash -c "source /opt/ros/iron/install/setup.bash && colcon build"
 
 RUN echo 'source /additional_packages_ws/install/setup.bash' >> /root/.bashrc

@@ -1,6 +1,5 @@
-docker run --rm -it \
-    -v $HOME/welt_auv:/welt_auv \
+docker run --rm -it --gpus all \
     --device=/dev/video0 \
     --net=host \
-    welt_auv:latest \
+    hydronautics/welt_auv:latest \
     bash
