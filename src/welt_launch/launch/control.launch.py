@@ -79,7 +79,7 @@ def generate_launch_description():
         receive_from_port_arg,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(str(Path(
-                get_package_share_directory('sauvc_launch'), 'main.launch.py'))),
+                get_package_share_directory('sauvc_launch'), 'control.launch.py'))),
             launch_arguments={
                 'uv_state_topic': LaunchConfiguration("uv_state_topic"),
                 'device_state_array_topic': LaunchConfiguration("device_state_array_topic"),

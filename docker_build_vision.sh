@@ -1,0 +1,1 @@
+docker buildx build --platform linux/arm64 -t hydronautics/welt_auv:vision -f Dockerfile.vision --push .

@@ -1,0 +1,1 @@
+docker buildx build --platform linux/amd64,linux/arm64 -t hydronautics/welt_auv:control -f Dockerfile.control --push .

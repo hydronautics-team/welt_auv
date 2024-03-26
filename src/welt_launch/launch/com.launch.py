@@ -65,7 +65,6 @@ def generate_launch_description():
         "receive_from_port", default_value='13050'
     )
 
-    # load ros config
     return LaunchDescription([
         uv_state_topic_arg,
         set_twist_srv_arg,
@@ -103,22 +102,22 @@ def generate_launch_description():
             respawn=True,
             respawn_delay=0.5,
         ),
-        Node(
-            package='welt_communication',
-            executable='udp_driver_node',
-            name='udp_driver_node',
-            parameters=[
-                {'driver_request_topic': LaunchConfiguration(
-                    "driver_request_topic")},
-                {'driver_response_topic': LaunchConfiguration(
-                    "driver_response_topic")},
-                {'send_to_ip': LaunchConfiguration("send_to_ip")},
-                {'send_to_port': LaunchConfiguration("send_to_port")},
-                {'receive_from_ip': LaunchConfiguration("receive_from_ip")},
-                {'receive_from_port': LaunchConfiguration(
-                    "receive_from_port")},
-            ],
-            respawn=True,
-            respawn_delay=0.5,
-        ),
+        # Node(
+        #     package='welt_communication',
+        #     executable='udp_driver_node',
+        #     name='udp_driver_node',
+        #     parameters=[
+        #         {'driver_request_topic': LaunchConfiguration(
+        #             "driver_request_topic")},
+        #         {'driver_response_topic': LaunchConfiguration(
+        #             "driver_response_topic")},
+        #         {'send_to_ip': LaunchConfiguration("send_to_ip")},
+        #         {'send_to_port': LaunchConfiguration("send_to_port")},
+        #         {'receive_from_ip': LaunchConfiguration("receive_from_ip")},
+        #         {'receive_from_port': LaunchConfiguration(
+        #             "receive_from_port")},
+        #     ],
+        #     respawn=True,
+        #     respawn_delay=0.5,
+        # ),
     ])
