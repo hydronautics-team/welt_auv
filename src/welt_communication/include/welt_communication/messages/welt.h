@@ -21,6 +21,8 @@ public:
     float roll;
     float pitch;
     float yaw;
+    float surge_accel;
+    float sway_accel;
     int8_t dev[dev_amount];
 
 

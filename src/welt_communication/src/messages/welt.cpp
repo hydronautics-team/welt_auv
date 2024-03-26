@@ -12,6 +12,8 @@ WeltMessage::WeltMessage() : AbstractMessage() {
     roll = 0.0;
     pitch = 0.0;
     yaw = 0.0;
+    surge_accel = 0.0;
+    sway_accel = 0.0;
     for (int i = 0; i < dev_amount; i++) {
         dev[i] = 0;
     }
@@ -32,6 +34,8 @@ void WeltMessage::pack(std::vector<uint8_t> &container) {
     pushToVector(container, roll);
     pushToVector(container, pitch);
     pushToVector(container, yaw);
+    pushToVector(container, surge_accel);
+    pushToVector(container, sway_accel);
     for (int i = 0; i < dev_amount; i++) {
         pushToVector(container, dev[i]);
     }
@@ -51,6 +55,8 @@ bool WeltMessage::parse(std::vector<uint8_t> &input) {
     for (int i = 0; i < dev_amount; i++) {
         popFromVector(input, dev[dev_amount - i]);
     }
+    popFromVector(input, sway_accel);
+    popFromVector(input, surge_accel);
     popFromVector(input, yaw);
     popFromVector(input, pitch);
     popFromVector(input, roll);
