@@ -1,6 +1,6 @@
 FROM hydronautics/stingray:latest
 
-RUN apt update && apt install -y --no-install-recommends ros-iron-rmw-cyclonedds-cpp
+# RUN apt update && apt install -y --no-install-recommends 
 
 RUN echo 'source /additional_packages/install/setup.bash' >> /root/.bashrc
 
