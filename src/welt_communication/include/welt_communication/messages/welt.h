@@ -7,7 +7,7 @@ class WeltMessage : public AbstractMessage {
 public:
     WeltMessage();
 
-    const static uint8_t length = 33; // 31(message) + 2(checksum) = 31 dyte
+    const static uint8_t length = 41; // 39(message) + 2(checksum) = 41 dyte
     static const uint8_t dev_amount = 2;
 
     uint8_t reset_imu;
