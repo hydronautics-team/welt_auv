@@ -1,1 +1,1 @@
-colcon build --packages-select sauvc_object_detection stingray_object_detection
+colcon build --packages-select sauvc_object_detection stingray_object_detection stingray_interfaces welt_launch sauvc_launch stingray_launch
