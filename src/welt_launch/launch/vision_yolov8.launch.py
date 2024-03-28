@@ -17,6 +17,6 @@ def generate_launch_description():
     return LaunchDescription([
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(str(Path(
-                get_package_share_directory('sauvc_launch'), 'vision.launch.py'))),
+                get_package_share_directory('sauvc_launch'), 'vision_yolov8.launch.py'))),
         ),
     ])

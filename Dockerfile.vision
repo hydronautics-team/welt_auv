@@ -7,6 +7,6 @@ RUN /bin/bash -c "source /additional_packages/install/setup.bash && /welt_auv/bu
 
 RUN echo 'source /welt_auv/install/setup.bash' >> /root/.bashrc
 
-ENTRYPOINT [ "/welt_auv/run_vision.sh" ]
+# ENTRYPOINT [ "/welt_auv/run_vision.sh" ]
 
 CMD ["bash"]
