@@ -17,6 +17,10 @@ def generate_launch_description():
     return LaunchDescription([
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(str(Path(
+                get_package_share_directory('welt_launch'), 'cam.launch.py'))),
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(str(Path(
                 get_package_share_directory('sauvc_launch'), 'vision_yolov5.launch.py'))),
         ),
     ])
