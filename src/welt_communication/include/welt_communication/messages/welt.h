@@ -9,6 +9,7 @@ public:
 
     const static uint8_t length = 41; // 39(message) + 2(checksum) = 41 dyte
     static const uint8_t dev_amount = 2;
+    static const uint8_t flare_amount = 3;
 
     uint8_t reset_imu;
     uint8_t stab_depth;
@@ -24,6 +25,8 @@ public:
     float surge_accel;
     float sway_accel;
     int8_t dev[dev_amount];
+    char flare_seq[flare_amount];
+    float modem_distance;
 
 
     uint16_t checksum;
