@@ -66,6 +66,8 @@ def generate_launch_description():
                 {'video_device': LaunchConfiguration("front_camera_path")},
                 {'camera_info_url': LaunchConfiguration("front_camera_calibration_path")},
                 {'camera_name': 'front_camera'},
+                {'image_width': 1280},
+                {'image_height': 720},
             ],
             respawn=True,
             respawn_delay=1,
