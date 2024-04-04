@@ -12,7 +12,6 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    calibration_config_dir = Path(get_package_share_directory('welt_cam')) / "configs"
     # front camera
     front_camera_topic_arg = DeclareLaunchArgument(
         "front_camera_topic", default_value='/stingray/topics/front_camera'
@@ -64,28 +63,30 @@ def generate_launch_description():
                 {'video_device': LaunchConfiguration("front_camera_path")},
                 {'camera_info_url': LaunchConfiguration("front_camera_calibration_path")},
                 {'camera_name': 'front_camera'},
-                {'image_width': 1280},
-                {'image_height': 720},
+                {'image_width': 640},
+                {'image_height': 480},
             ],
             respawn=True,
             respawn_delay=1,
         ),
 
         # bottom camera
-        # Node(
-        #     package='usb_cam',
-        #     executable='usb_cam_node_exe',
-        #     name='bottom_camera_node',
-        #     remappings=[
-        #         ('/image_raw', LaunchConfiguration("bottom_camera_topic")),\
-        #         ('/camera_info', LaunchConfiguration("bottom_camera_info_topic")),
-        #     ],
-        #     parameters=[
-        #         {'video_device': LaunchConfiguration("bottom_camera_path")},
-        #         {'camera_info_url': LaunchConfiguration("bottom_camera_calibration_path")},
-        #         {'camera_name': 'bottom_camera'},
-        #     ],
-        #     respawn=True,
-        #     respawn_delay=1,
-        # ),
+        Node(
+            package='usb_cam',
+            executable='usb_cam_node_exe',
+            name='bottom_camera_node',
+            remappings=[
+                ('/image_raw', LaunchConfiguration("bottom_camera_topic")),\
+                ('/camera_info', LaunchConfiguration("bottom_camera_info_topic")),
+            ],
+            parameters=[
+                {'video_device': LaunchConfiguration("bottom_camera_path")},
+                {'camera_info_url': LaunchConfiguration("bottom_camera_calibration_path")},
+                {'camera_name': 'bottom_camera'},
+                {'image_width': 640},
+                {'image_height': 480},
+            ],
+            respawn=True,
+            respawn_delay=1,
+        ),
     ])
