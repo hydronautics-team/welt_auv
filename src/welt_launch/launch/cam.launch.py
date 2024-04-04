@@ -13,8 +13,6 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     calibration_config_dir = Path(get_package_share_directory('welt_cam')) / "configs"
-    front_camera_calibration_path = calibration_config_dir / "front_camera.yaml"
-    bottom_camera_calibration_path = calibration_config_dir / "bottom_camera.yaml"
     # front camera
     front_camera_topic_arg = DeclareLaunchArgument(
         "front_camera_topic", default_value='/stingray/topics/front_camera'
@@ -23,7 +21,7 @@ def generate_launch_description():
         "front_camera_info_topic", default_value='/stingray/topics/front_camera/camera_info'
     )
     front_camera_path_arg = DeclareLaunchArgument(
-        "front_camera_path", default_value='/dev/video0'
+        "front_camera_path", default_value='/dev/v4l/by-id/usb-Sonix_Technology_Co.__Ltd._H264_USB_Camera_SN0001-video-index0'
     )
     front_camera_calibration_path_arg = DeclareLaunchArgument(
         "front_camera_calibration_path", default_value="package://welt_cam/configs/front_camera.yaml"
@@ -36,10 +34,10 @@ def generate_launch_description():
         "bottom_camera_info_topic", default_value='/stingray/topics/bottom_camera/camera_info'
     )
     bottom_camera_path_arg = DeclareLaunchArgument(
-        "bottom_camera_path", default_value='/dev/video2'
+        "bottom_camera_path", default_value='/dev/v4l/by-id/usb-Microsoft_Microsoft®_LifeCam_HD-3000-video-index0'
     )
     bottom_camera_calibration_path_arg = DeclareLaunchArgument(
-        "bottom_camera_calibration_path", default_value=str(bottom_camera_calibration_path)
+        "bottom_camera_calibration_path", default_value="package://welt_cam/configs/bottom_camera.yaml"
     )
 
     # load ros config
