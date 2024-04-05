@@ -59,7 +59,7 @@ def generate_launch_description():
                 {"output_width": 640},
                 {"output_height": 480},
                 {"output_fps": 30},
-                {"output_format": 'h264'},
+                {"output_format": 'mp4v'},
                 {"record_dir": "./records/"},
             ],
             respawn=True,
