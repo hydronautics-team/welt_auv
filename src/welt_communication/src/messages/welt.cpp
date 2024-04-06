@@ -61,10 +61,10 @@ bool WeltMessage::parse(std::vector<uint8_t> &input) {
     // }
     popFromVector(input, modem_distance);
     for (int i = 0; i < flare_amount; i++) {
-        popFromVector(input, flare_seq[flare_amount - i]);
+        popFromVector(input, flare_seq[flare_amount - i - 1]);
     }
     for (int i = 0; i < dev_amount; i++) {
-        popFromVector(input, dev[dev_amount - i]);
+        popFromVector(input, dev[dev_amount - i - 1]);
     }
     popFromVector(input, sway_accel);
     popFromVector(input, surge_accel);
