@@ -7,7 +7,7 @@ class WeltMessage : public AbstractMessage {
 public:
     WeltMessage();
 
-    const static uint8_t length = 48; // 39(message) + 2(checksum) = 41 dyte
+    const static uint8_t length = 48; // 46(message) + 2(checksum) = 48 dyte
     static const uint8_t dev_amount = 2;
     static const uint8_t flare_amount = 3;
 
@@ -24,10 +24,9 @@ public:
     float yaw;
     float surge_accel;
     float sway_accel;
-    int8_t dev[dev_amount];
+    uint8_t dev[dev_amount];
     char flare_seq[flare_amount];
     float modem_distance;
-
 
     uint16_t checksum;
     // parsel end
