@@ -71,22 +71,22 @@ def generate_launch_description():
         ),
 
         # bottom camera
-        # Node(
-        #     package='usb_cam',
-        #     executable='usb_cam_node_exe',
-        #     name='bottom_camera_node',
-        #     remappings=[
-        #         ('/image_raw', LaunchConfiguration("bottom_camera_topic")),\
-        #         ('/camera_info', LaunchConfiguration("bottom_camera_info_topic")),
-        #     ],
-        #     parameters=[
-        #         {'video_device': LaunchConfiguration("bottom_camera_path")},
-        #         {'camera_info_url': LaunchConfiguration("bottom_camera_calibration_path")},
-        #         {'camera_name': 'bottom_camera'},
-        #         {'image_width': 640},
-        #         {'image_height': 480},
-        #     ],
-        #     respawn=True,
-        #     respawn_delay=1,
-        # ),
+        Node(
+            package='usb_cam',
+            executable='usb_cam_node_exe',
+            name='bottom_camera_node',
+            remappings=[
+                ('/image_raw', LaunchConfiguration("bottom_camera_topic")),\
+                ('/camera_info', LaunchConfiguration("bottom_camera_info_topic")),
+            ],
+            parameters=[
+                {'video_device': LaunchConfiguration("bottom_camera_path")},
+                {'camera_info_url': LaunchConfiguration("bottom_camera_calibration_path")},
+                {'camera_name': 'bottom_camera'},
+                {'image_width': 640},
+                {'image_height': 480},
+            ],
+            respawn=True,
+            respawn_delay=1,
+        ),
     ])
