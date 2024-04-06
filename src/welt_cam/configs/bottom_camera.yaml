@@ -5,7 +5,7 @@ camera_matrix:
   rows: 3
   cols: 3
   data: [385.1364, 0.000000, 317.6051, 0.000000, 517.1356, 205.86462, 0.000000, 0.000000, 1.000000]
-distortion_model: plumb_bob
+distortion_model: radtan
 distortion_coefficients:
   rows: 1
   cols: 5
