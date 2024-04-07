@@ -1,4 +1,4 @@
-FROM hydronautics/welt_auv:tx2
+FROM hydronautics/severov_auv:xavier
 
 WORKDIR /welt_auv
 COPY src src
