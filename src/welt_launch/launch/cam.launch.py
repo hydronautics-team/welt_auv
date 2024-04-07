@@ -20,7 +20,7 @@ def generate_launch_description():
         "front_camera_info_topic", default_value='/stingray/topics/front_camera/camera_info'
     )
     front_camera_path_arg = DeclareLaunchArgument(
-        "front_camera_path", default_value='/dev/v4l/by-id/usb-Sonix_Technology_Co.__Ltd._H264_USB_Camera_SN0001-video-index0'
+        "front_camera_path", default_value='/dev/video0'
     )
     front_camera_calibration_path_arg = DeclareLaunchArgument(
         "front_camera_calibration_path", default_value="package://welt_cam/configs/front_camera.yaml"
@@ -70,23 +70,39 @@ def generate_launch_description():
             respawn_delay=1,
         ),
 
-        # bottom camera
         Node(
-            package='usb_cam',
-            executable='usb_cam_node_exe',
-            name='bottom_camera_node',
-            remappings=[
-                ('/image_raw', LaunchConfiguration("bottom_camera_topic")),\
-                ('/camera_info', LaunchConfiguration("bottom_camera_info_topic")),
-            ],
+            package='stingray_object_detection',
+            executable='video_recorder',
+            name='video_recorder',
             parameters=[
-                {'video_device': LaunchConfiguration("bottom_camera_path")},
-                {'camera_info_url': LaunchConfiguration("bottom_camera_calibration_path")},
-                {'camera_name': 'bottom_camera'},
-                {'image_width': 640},
-                {'image_height': 480},
+                {"source_topic": "/stingray/topics/front_camera"},
+                {"output_width": 640},
+                {"output_height": 480},
+                {"output_fps": 30},
+                {"output_format": 'mp4v'},
+                {"record_dir": "./records/"},
             ],
             respawn=True,
             respawn_delay=1,
-        ),
+        )
+
+        # bottom camera
+        # Node(
+        #     package='usb_cam',
+        #     executable='usb_cam_node_exe',
+        #     name='bottom_camera_node',
+        #     remappings=[
+        #         ('/image_raw', LaunchConfiguration("bottom_camera_topic")),\
+        #         ('/camera_info', LaunchConfiguration("bottom_camera_info_topic")),
+        #     ],
+        #     parameters=[
+        #         {'video_device': LaunchConfiguration("bottom_camera_path")},
+        #         {'camera_info_url': LaunchConfiguration("bottom_camera_calibration_path")},
+        #         {'camera_name': 'bottom_camera'},
+        #         {'image_width': 640},
+        #         {'image_height': 480},
+        #     ],
+        #     respawn=True,
+        #     respawn_delay=1,
+        # ),
     ])
