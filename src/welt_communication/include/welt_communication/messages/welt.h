@@ -27,6 +27,7 @@ public:
     uint8_t dev[dev_amount];
     char flare_seq[flare_amount];
     float modem_distance;
+    uint8_t peleng_angle;
 
     uint16_t checksum;
     // parsel end

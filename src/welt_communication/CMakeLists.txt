@@ -35,18 +35,28 @@ add_executable(hardware_bridge_node
         )
 ament_target_dependencies(hardware_bridge_node rclcpp std_msgs std_srvs serial stingray_core_interfaces stingray_core_communication)
 
-add_executable(udp_driver_node
-        src/udp_driver_node.cpp
+# udp_driver_receiver_node
+add_executable(udp_driver_receiver_node
+        src/udp_driver_receiver_node.cpp
         include/welt_communication/messages/welt.h
         src/messages/welt.cpp
         )
-ament_target_dependencies(udp_driver_node rclcpp Boost std_msgs std_srvs serial stingray_core_interfaces stingray_core_communication)
+ament_target_dependencies(udp_driver_receiver_node rclcpp Boost std_msgs std_srvs serial stingray_core_interfaces stingray_core_communication)
+
+# udp_driver_sender_node
+add_executable(udp_driver_sender_node
+        src/udp_driver_sender_node.cpp
+        include/welt_communication/messages/welt.h
+        src/messages/welt.cpp
+        )
+ament_target_dependencies(udp_driver_sender_node rclcpp Boost std_msgs std_srvs serial stingray_core_interfaces stingray_core_communication)
 
 
 ## Install executable
 install(TARGETS
         hardware_bridge_node
-        udp_driver_node
+        udp_driver_receiver_node
+        udp_driver_sender_node
         # ${PROJECT_NAME}
         DESTINATION lib/${PROJECT_NAME}
         # EXPORT ${PROJECT_NAME}

@@ -21,6 +21,7 @@ WeltMessage::WeltMessage() : AbstractMessage() {
         flare_seq[i] = 0;
     }
     modem_distance = 0.0;
+    peleng_angle = 0;
 
     checksum = 0;
 }
@@ -47,6 +48,7 @@ void WeltMessage::pack(std::vector<uint8_t> &container) {
         pushToVector(container, flare_seq[i]);
     }
     pushToVector(container, modem_distance);
+    pushToVector(container, peleng_angle);
 
     uint16_t checksum = getChecksum16b(container);
     pushToVector(container, checksum);  // do i need to revert bytes here?
@@ -59,6 +61,8 @@ bool WeltMessage::parse(std::vector<uint8_t> &input) {
     // if (checksum_calc != checksum) {
     //     return false;
     // }
+
+    popFromVector(input, peleng_angle);
     popFromVector(input, modem_distance);
     for (int i = 0; i < flare_amount; i++) {
         popFromVector(input, flare_seq[flare_amount - i - 1]);
