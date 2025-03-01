@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_NAME="welt_auv_control"
+CONTAINER_NAME="welt_auv_od"
 
 # Проверяем, запущен ли контейнер с данным именем
 RUNNING_CONTAINER=$(docker ps -q -f name="${CONTAINER_NAME}")
