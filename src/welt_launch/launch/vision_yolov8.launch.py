@@ -14,13 +14,38 @@ from launch_ros.actions import PushRosNamespace
 
 
 def generate_launch_description():
+    # zbar camera
+    zbar_camera_topic_arg = DeclareLaunchArgument(
+        "zbar_camera_topic", default_value='/zed/zed_node/left/image_rect_color/compressed'
+    )
+    # object detection
+    image_topic_list_arg = DeclareLaunchArgument(
+        "image_topic_list", default_value='[/zed/zed_node/left_raw/image_raw_color]'
+    )
+    weights_pkg_name_arg = DeclareLaunchArgument(
+        "weights_pkg_name", default_value='sauvc_object_detection'
+    )
+    bbox_attrs_pkg_name_arg = DeclareLaunchArgument(
+        "bbox_attrs_pkg_name", default_value='sauvc_object_detection'
+    )
+
     return LaunchDescription([
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(str(Path(
-                get_package_share_directory('welt_launch'), 'cam.launch.py'))),
-        ),
+        zbar_camera_topic_arg,
+        image_topic_list_arg,
+        weights_pkg_name_arg,
+        bbox_attrs_pkg_name_arg,
+        # IncludeLaunchDescription(
+        #     PythonLaunchDescriptionSource(str(Path(
+        #         get_package_share_directory('welt_launch'), 'cam.launch.py'))),
+        # ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(str(Path(
                 get_package_share_directory('sauvc_launch'), 'vision_yolov8.launch.py'))),
+            launch_arguments={
+                'zbar_camera_topic': LaunchConfiguration("zbar_camera_topic"),
+                'weights_pkg_name': LaunchConfiguration("weights_pkg_name"),
+                'bbox_attrs_pkg_name': LaunchConfiguration("bbox_attrs_pkg_name"),
+                'image_topic_list': LaunchConfiguration("image_topic_list"),
+            }.items(),
         ),
     ])
