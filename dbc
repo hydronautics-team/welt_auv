@@ -32,4 +32,5 @@ docker run -it --rm \
     --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
     --ipc=host \
     --net=host \
-    hydronautics/welt_auv:control ros2 launch welt_launch control.launch.py
+    hydronautics/welt_auv:control bash
+    # ros2 launch welt_launch control.launch.py
