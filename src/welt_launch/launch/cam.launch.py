@@ -14,7 +14,7 @@ def generate_launch_description():
 
     # front camera
     front_camera_topic_arg = DeclareLaunchArgument(
-        "front_camera_topic", default_value='/stingray/topics/front_camera'
+        "front_camera_topic", default_value='/zed/zed_node/left_raw/image_raw_color'
     )
     front_camera_info_topic_arg = DeclareLaunchArgument(
         "front_camera_info_topic", default_value='/stingray/topics/front_camera/camera_info'
@@ -70,21 +70,21 @@ def generate_launch_description():
             respawn_delay=1,
         ),
 
-        Node(
-            package='stingray_object_detection',
-            executable='video_recorder',
-            name='video_recorder',
-            parameters=[
-                {"source_topic": "/stingray/topics/front_camera"},
-                {"output_width": 640},
-                {"output_height": 480},
-                {"output_fps": 30},
-                {"output_format": 'mp4v'},
-                {"record_dir": "./records/"},
-            ],
-            respawn=True,
-            respawn_delay=1,
-        )
+        # Node(
+        #     package='stingray_object_detection',
+        #     executable='video_recorder',
+        #     name='video_recorder',
+        #     parameters=[
+        #         {"source_topic": "/stingray/topics/front_camera"},
+        #         {"output_width": 640},
+        #         {"output_height": 480},
+        #         {"output_fps": 30},
+        #         {"output_format": 'mp4v'},
+        #         {"record_dir": "./records/"},
+        #     ],
+        #     respawn=True,
+        #     respawn_delay=1,
+        # )
 
         # bottom camera
         # Node(
