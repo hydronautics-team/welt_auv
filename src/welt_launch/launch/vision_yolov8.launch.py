@@ -16,7 +16,7 @@ from launch_ros.actions import PushRosNamespace
 def generate_launch_description():
     # zbar camera
     zbar_camera_topic_arg = DeclareLaunchArgument(
-        "zbar_camera_topic", default_value='/zed/zed_node/left/image_rect_color/compressed'
+        "zbar_camera_topic", default_value='/zed/zed_node/left/image_rect_color'
     )
     # object detection
     image_topic_list_arg = DeclareLaunchArgument(
