@@ -99,7 +99,7 @@
     },
     "C_Cpp.errorSquiggles": "enabled",
     "cmake.configureOnOpen": true,
-    "cmake.sourceDirectory": "/home/super_ubuntu22/stingray/build/stingray_core_interfaces/stingray_core_interfaces__py",
+    "cmake.sourceDirectory": "/home/vladushked/welt_auv/build/stingray_core_interfaces/stingray_core_interfaces__py",
     "ros.isolateEnvironment": null,
     "C_Cpp.default.compilerPath": "/usr/bin/gcc"
 }
