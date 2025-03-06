@@ -14,6 +14,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+      
+      # Checkout приватного репозитория с весами
+      - name: Checkout private weights repository
+        uses: actions/checkout@v2
+        with:
+          repository: hydronautics/weights   # замените на имя вашего приватного репозитория
+          token: ${{ secrets.WEIGHTS_REPO_TOKEN }}
+          path: weights
+
+      # Копирование файла с весами из приватного репозитория в нужное место основного репозитория
+      - name: Copy weights file
+        run: |
+          cp weights/sauvc/2024/yolov8.pt src/sauvc/src/sauvc_object_detection/weights/
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
