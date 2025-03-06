@@ -19,7 +19,7 @@ jobs:
       - name: Checkout private weights repository
         uses: actions/checkout@v2
         with:
-          repository: hydronautics/weights   # замените на имя вашего приватного репозитория
+          repository: hydronautics-team/weights  # замените на имя вашего приватного репозитория
           token: ${{ secrets.WEIGHTS_REPO_TOKEN }}
           path: weights
 
