@@ -12,11 +12,11 @@ from launch_ros.actions import Node, PushRosNamespace
 def generate_launch_description():
     # zbar camera
     zbar_camera_topic_arg = DeclareLaunchArgument(
-        "zbar_camera_topic", default_value='/zed/zed_node/left/image_rect_color'
+        "zbar_camera_topic", default_value='/zed/zed_node/rgb/image_rect_color'
     )
     # object detection
     image_topic_list_arg = DeclareLaunchArgument(
-        "image_topic_list", default_value='[/zed/zed_node/left/image_raw_color]'
+        "image_topic_list", default_value='[/zed/zed_node/rgb/image_rect_color]'
     )
     weights_pkg_name_arg = DeclareLaunchArgument(
         "weights_pkg_name", default_value='sauvc_object_detection'

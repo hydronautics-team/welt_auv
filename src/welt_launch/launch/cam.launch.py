@@ -12,7 +12,7 @@ def generate_launch_description():
 
     # front camera
     front_camera_topic_arg = DeclareLaunchArgument(
-        "front_camera_topic", default_value='/zed/zed_node/left/image_raw_color'
+        "front_camera_topic", default_value='/zed/zed_node/rgb/image_rect_color'
     )
     front_camera_info_topic_arg = DeclareLaunchArgument(
         "front_camera_info_topic", default_value='/stingray/topics/front_camera/camera_info'
