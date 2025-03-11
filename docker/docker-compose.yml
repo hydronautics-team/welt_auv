@@ -1,0 +1,51 @@
+services:
+  welt_auv_control:
+    image: hydronautics/welt_auv:control
+    container_name: s_welt_auv_control
+    ipc: host
+    networks:
+      - welt_net
+    command: ros2 launch welt_launch control.launch.py
+    restart: unless-stopped
+
+  welt_auv_od:
+    image: hydronautics/welt_auv:od
+    container_name: s_welt_auv_od
+    ipc: host
+    networks:
+      - welt_net
+    platform: linux/arm64
+    runtime: nvidia
+    gpus: all
+    command: ros2 launch welt_launch vision_yolov8.launch.py
+    restart: unless-stopped
+
+  zed_ros2:
+      image: hydronautics/zed_ros2:l4t_r36.3.0_s4.2.5
+      container_name: s_zed_ros2
+      ipc: host
+      networks:
+        - welt_net
+      runtime: nvidia
+      gpus: all
+      privileged: true
+      volumes:
+        - /dev:/dev
+        - /dev/shm:/dev/shm
+        - /usr/local/zed/resources:/usr/local/zed/resources
+        - /usr/local/zed/settings:/usr/local/zed/settings
+
+  rviz2:
+    image: husarion/rviz2:humble-11.2.11-20240320
+    container_name: s_rviz2
+    ipc: host
+    networks:
+      - welt_net
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
+networks:
+  welt_net:
+    driver: bridge

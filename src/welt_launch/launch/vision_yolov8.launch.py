@@ -1,26 +1,22 @@
 from pathlib import Path
 
 from ament_index_python import get_package_share_directory
-
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
-from launch.actions import GroupAction
+from launch.actions import (DeclareLaunchArgument, GroupAction,
+                            IncludeLaunchDescription)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
-from launch.substitutions import TextSubstitution
-from launch_ros.actions import Node
-from launch_ros.actions import PushRosNamespace
+from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch_ros.actions import Node, PushRosNamespace
 
 
 def generate_launch_description():
     # zbar camera
     zbar_camera_topic_arg = DeclareLaunchArgument(
-        "zbar_camera_topic", default_value='/zed/zed_node/left/image_rect_color'
+        "zbar_camera_topic", default_value='/zed/zed_node/rgb/image_rect_color'
     )
     # object detection
     image_topic_list_arg = DeclareLaunchArgument(
-        "image_topic_list", default_value='[/zed/zed_node/left_raw/image_raw_color]'
+        "image_topic_list", default_value='[/zed/zed_node/rgb/image_rect_color]'
     )
     weights_pkg_name_arg = DeclareLaunchArgument(
         "weights_pkg_name", default_value='sauvc_object_detection'
