@@ -1,10 +1,8 @@
 from pathlib import Path
 
 from ament_index_python import get_package_share_directory
-
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.actions import IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
@@ -14,7 +12,7 @@ def generate_launch_description():
 
     # front camera
     front_camera_topic_arg = DeclareLaunchArgument(
-        "front_camera_topic", default_value='/zed/zed_node/left_raw/image_raw_color'
+        "front_camera_topic", default_value='/zed/zed_node/rgb/image_rect_color'
     )
     front_camera_info_topic_arg = DeclareLaunchArgument(
         "front_camera_info_topic", default_value='/stingray/topics/front_camera/camera_info'
