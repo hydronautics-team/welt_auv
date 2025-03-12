@@ -18,8 +18,8 @@ def generate_launch_description():
     image_topic_list_arg = DeclareLaunchArgument(
         "image_topic_list", default_value='[/zed/zed_node/rgb/image_rect_color]'
     )
-    camera_info_topic_arg = DeclareLaunchArgument(
-        "camera_info_topic", default_value='[/zed/zed_node/rgb/camera_info]'
+    camera_info_topic_list_arg = DeclareLaunchArgument(
+        "camera_info_topic_list", default_value='[/zed/zed_node/rgb/camera_info]'
     )
     weights_pkg_name_arg = DeclareLaunchArgument(
         "weights_pkg_name", default_value='sauvc_object_detection'
@@ -31,7 +31,7 @@ def generate_launch_description():
     return LaunchDescription([
         zbar_camera_topic_arg,
         image_topic_list_arg,
-        camera_info_topic_arg,
+        camera_info_topic_list_arg,
         weights_pkg_name_arg,
         bbox_attrs_pkg_name_arg,
         # IncludeLaunchDescription(
@@ -46,7 +46,7 @@ def generate_launch_description():
                 'weights_pkg_name': LaunchConfiguration("weights_pkg_name"),
                 'bbox_attrs_pkg_name': LaunchConfiguration("bbox_attrs_pkg_name"),
                 'image_topic_list': LaunchConfiguration("image_topic_list"),
-                'camera_info_topic': LaunchConfiguration("camera_info_topic"),
+                'camera_info_topic_list': LaunchConfiguration("camera_info_topic_list"),
             }.items(),
         ),
     ])
