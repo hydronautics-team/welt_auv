@@ -14,7 +14,7 @@ def generate_launch_description():
     return LaunchDescription([
         # front camera
         DeclareLaunchArgument("enable_front_camera",
-                              default_value="true",
+                              default_value="false",
                               description="Включить (true) или отключить (false) ноду нижней камеры"),
         DeclareLaunchArgument("enable_recording_front_camera",
                               default_value="true",
@@ -27,7 +27,7 @@ def generate_launch_description():
                               default_value='640',
                               description='Ширина видео'),
         DeclareLaunchArgument('front_camera_output_height',
-                              default_value='480',
+                              default_value='360',
                               description='Высота видео'),
         # bottom camera
         DeclareLaunchArgument("enable_bottom_camera",
@@ -37,7 +37,7 @@ def generate_launch_description():
                               default_value="true",
                               description="Включить(true) или отключить(false) ноду нижней камеры"),
         DeclareLaunchArgument("bottom_camera_path",
-                              default_value='/dev/video6'),
+                              default_value='/dev/v4l/by-path/platform-3610000.usb-usb-0:2.4:1.0-video-index0'),
         DeclareLaunchArgument("bottom_camera_calibration_path",
                               default_value="package://welt_cam/configs/bottom_camera.yaml"),
         DeclareLaunchArgument('bottom_camera_output_width',
