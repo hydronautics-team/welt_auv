@@ -17,7 +17,7 @@ services:
     platform: linux/arm64
     runtime: nvidia
     gpus: all
-    command: ros2 launch welt_launch vision_yolov8.launch.py
+    command: ros2 launch welt_launch od.launch.py
     restart: unless-stopped
 
   zed_ros2:
@@ -48,4 +48,4 @@ services:
 
 networks:
   welt_net:
-    driver: bridge
+    driver: host
