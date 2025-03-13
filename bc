@@ -1,0 +1,7 @@
+#!/bin/bash
+
+colcon build --packages-select colcon build --packages-select \
+    welt_communication welt_launch \
+    sauvc_launch sauvc_missions sauvc_movement sauvc_interfaces sauvc_pinger_finder \
+    stingray_devices stingray_interfaces stingray_launch stingray_missions stingray_movement stingray_utils \
+    stingray_core_communication stingray_core_interfaces stingray_core_launch
