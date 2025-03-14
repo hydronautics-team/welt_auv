@@ -6,6 +6,7 @@ echo "[DOCKER-INFO] Запускаем сборку..."
 
 source "/opt/ros/humble/install/setup.bash"
 source "/additional_packages/install/setup.bash"
+source /welt_auv/install/setup.bash
 
 if ! ./bv; then
   echo "[DOCKER-ERROR] Сборка завершилась с ошибкой. Выходим..."
