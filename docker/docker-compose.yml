@@ -21,8 +21,10 @@ services:
     restart: unless-stopped
 
   zed_ros2:
-      image: hydronautics/zed_ros2:l4t_r36.3.0_s4.2.5
+      image: hydronautics/zed_ros2:l4t-r36.3.0-s4.2.5
       container_name: s_zed_ros2
+      # image: hydronautics/zed_ros2:l4t-r36.3.0-s4.2.5-neural # for neural
+      # container_name: s_zed_ros2_neural # for neural
       ipc: host
       networks:
         - welt_net
@@ -34,6 +36,7 @@ services:
         - /dev/shm:/dev/shm
         - /usr/local/zed/resources:/usr/local/zed/resources
         - /usr/local/zed/settings:/usr/local/zed/settings
+      command: ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zedm
 
   rviz2:
     image: husarion/rviz2:humble-11.2.11-20240320
@@ -45,7 +48,22 @@ services:
       - DISPLAY=${DISPLAY}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix
+    profiles:
+      - debug
+      - visualize
+
+  recorder:
+    image: ros:humble-ros-base
+    container_name: s_recorder
+    ipc: host
+    networks:
+      - welt_net
+    volumes:
+      - ${HOME}/rosbags:/rosbags
+    command: ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") -a
+    profiles:
+      - debug
 
 networks:
   welt_net:
-    driver: bridge
+    driver: host
