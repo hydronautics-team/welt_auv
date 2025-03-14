@@ -60,9 +60,10 @@ services:
       - welt_net
     volumes:
       - ${HOME}/rosbags:/rosbags
-    command: ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") -a
+    command: timeout 300 ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") --compression-mode file --compression-format zstd -a
     profiles:
       - debug
+    restart: no
 
 networks:
   welt_net:
