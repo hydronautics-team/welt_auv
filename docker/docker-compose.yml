@@ -26,7 +26,7 @@ services:
       - ${HOME}/welt:/welt
 
   zed_ros2:
-      image: hydronautics/zed_ros2:l4t-r36.3.0-s4.2.5
+      image: hydronautics/zed:humble-l4t-r36.3.0-s4.2.5
       container_name: s_zed_ros2
       # image: hydronautics/zed_ros2:l4t-r36.3.0-s4.2.5-neural # for neural
       # container_name: s_zed_ros2_neural # for neural

@@ -31,10 +31,10 @@ def generate_launch_description():
                               description='Высота видео'),
         # bottom camera
         DeclareLaunchArgument("enable_bottom_camera",
-                              default_value="true",
+                              default_value="false",
                               description="Включить (true) или отключить (false) ноду нижней камеры"),
         DeclareLaunchArgument("enable_recording_bottom_camera",
-                              default_value="true",
+                              default_value="false",
                               description="Включить(true) или отключить(false) ноду нижней камеры"),
         DeclareLaunchArgument("bottom_camera_path",
                               default_value='/dev/v4l/by-path/platform-3610000.usb-usb-0:2.4:1.0-video-index0'),
