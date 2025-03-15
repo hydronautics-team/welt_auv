@@ -3,8 +3,7 @@ services:
     image: hydronautics/welt_auv:control
     container_name: s_welt_auv_control
     ipc: host
-    networks:
-      - welt_net
+    network_mode: host
     command: ros2 launch welt_launch control.launch.py
     restart: unless-stopped
 
@@ -12,8 +11,6 @@ services:
     image: hydronautics/welt_auv:od
     container_name: s_welt_auv_od
     ipc: host
-    networks:
-      - welt_net
     platform: linux/arm64
     runtime: nvidia
     gpus: all
@@ -21,13 +18,11 @@ services:
     restart: unless-stopped
 
   zed_ros2:
-      image: hydronautics/zed_ros2:l4t-r36.3.0-s4.2.5
+      image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5
       container_name: s_zed_ros2
-      # image: hydronautics/zed_ros2:l4t-r36.3.0-s4.2.5-neural # for neural
+      # image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5-neural # for neural
       # container_name: s_zed_ros2_neural # for neural
       ipc: host
-      networks:
-        - welt_net
       runtime: nvidia
       gpus: all
       privileged: true
@@ -42,8 +37,6 @@ services:
     image: husarion/rviz2:humble-11.2.11-20240320
     container_name: s_rviz2
     ipc: host
-    networks:
-      - welt_net
     environment:
       - DISPLAY=${DISPLAY}
     volumes:
@@ -56,15 +49,9 @@ services:
     image: ros:humble-ros-base
     container_name: s_recorder
     ipc: host
-    networks:
-      - welt_net
     volumes:
       - ${HOME}/rosbags:/rosbags
     command: timeout 300 ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") --compression-mode file --compression-format zstd -a
     profiles:
       - debug
     restart: no
-
-networks:
-  welt_net:
-    driver: host
