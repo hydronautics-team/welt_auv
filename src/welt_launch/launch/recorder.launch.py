@@ -14,10 +14,10 @@ def generate_launch_description():
 
     # front camera
     front_camera_topic_arg = DeclareLaunchArgument(
-        "front_camera_topic", default_value='/stingray/topics/front_camera'
+        "front_camera_topic", default_value='/stingray/topics/camera/front'
     )
     front_camera_info_topic_arg = DeclareLaunchArgument(
-        "front_camera_info_topic", default_value='/stingray/topics/front_camera/camera_info'
+        "front_camera_info_topic", default_value='/stingray/topics/camera/front/camera_info'
     )
     front_camera_path_arg = DeclareLaunchArgument(
         "front_camera_path", default_value='/dev/video0'
@@ -27,10 +27,10 @@ def generate_launch_description():
     )
     # bottom camera
     bottom_camera_topic_arg = DeclareLaunchArgument(
-        "bottom_camera_topic", default_value='/stingray/topics/bottom_camera'
+        "bottom_camera_topic", default_value='/stingray/topics/camera/bottom'
     )
     bottom_camera_info_topic_arg = DeclareLaunchArgument(
-        "bottom_camera_info_topic", default_value='/stingray/topics/bottom_camera/camera_info'
+        "bottom_camera_info_topic", default_value='/stingray/topics/camera/bottom/camera_info'
     )
     bottom_camera_path_arg = DeclareLaunchArgument(
         "bottom_camera_path", default_value='/dev/v4l/by-id/usb-Microsoft_Microsoft®_LifeCam_HD-3000-video-index0'
@@ -55,7 +55,7 @@ def generate_launch_description():
             executable='video_recorder',
             name='video_recorder',
             parameters=[
-                {"source_topic": "/stingray/topics/front_camera"},
+                {"source_topic": "/stingray/topics/camera/front"},
                 {"output_width": 640},
                 {"output_height": 480},
                 {"output_fps": 30},

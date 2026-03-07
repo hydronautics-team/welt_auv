@@ -25,8 +25,9 @@ fi
 echo "Контейнер ${CONTAINER_NAME} не найден. Создаём и запускаем новый..."
 
 # Запускаем новый контейнер в интерактивном режиме
-docker run -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
+docker run -d --platform=linux/arm64 --gpus all --runtime nvidia \
     --name "${CONTAINER_NAME}" \
+    --restart unless-stopped \
     --mount type=bind,source="$(pwd)",target=/welt_auv \
     --mount type=bind,source="/dev",target=/dev \
     --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
@@ -34,4 +35,4 @@ docker run -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
     --device=/dev/video0 \
     --ipc=host \
     --net=host \
-    hydronautics/welt_auv:od bash
+    hydronautics/welt_auv:od bash lv

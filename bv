@@ -1,0 +1,6 @@
+#!/bin/bash
+
+colcon build --packages-select \
+    welt_launch welt_cam \
+    sauvc_object_detection sauvc_launch sauvc_interfaces \
+    stingray_cam stingray_recorder stingray_object_detection stingray_interfaces stingray_launch

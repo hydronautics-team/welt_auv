@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_NAME="welt_auv_od"
+CONTAINER_NAME="welt_auv_control"
 
 # Проверяем, запущен ли контейнер с данным именем
 RUNNING_CONTAINER=$(docker ps -q -f name="${CONTAINER_NAME}")
@@ -25,13 +25,13 @@ fi
 echo "Контейнер ${CONTAINER_NAME} не найден. Создаём и запускаем новый..."
 
 # Запускаем новый контейнер в интерактивном режиме
-docker run -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
+docker run -d \
     --name "${CONTAINER_NAME}" \
+    --restart unless-stopped \
     --mount type=bind,source="$(pwd)",target=/welt_auv \
-    --mount type=bind,source="/dev",target=/dev \
     --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
     --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
-    --device=/dev/video0 \
     --ipc=host \
     --net=host \
-    hydronautics/welt_auv:od bash
+    hydronautics/welt_auv:control bash lc
+    # ros2 launch welt_launch control.launch.py

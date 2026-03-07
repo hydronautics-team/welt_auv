@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+  echo "Использование: $0 <enable>"
+  exit 1
+fi
+
+enable="$1"
+
+ros2 topic pub /stingray/topics/enable_object_detection stingray_interfaces/msg/EnableTopic "{topic_name: /stingray/topics/camera/bottom, enable: \"$enable\"}"
