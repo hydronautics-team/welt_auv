@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+  echo "Использование: $0 <transition>"
+  exit 1
+fi
+
+transition="$1"
+
+ros2 service call /stingray/services/transition stingray_interfaces/srv/SetTransition "{transition: \"$transition\"}"

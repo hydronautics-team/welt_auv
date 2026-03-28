@@ -1,0 +1,62 @@
+services:
+  welt_auv_control:
+    image: hydronautics/welt_auv:control
+    container_name: s_welt_auv_control
+    ipc: host
+    network_mode: host
+    command: ros2 launch welt_launch control.launch.py
+    restart: unless-stopped
+    volumes:
+      - ${HOME}/welt:/welt
+
+
+  welt_auv_od:
+    image: hydronautics/welt_auv:od
+    container_name: s_welt_auv_od
+    ipc: host
+    platform: linux/arm64
+    runtime: nvidia
+    gpus: all
+    command: ros2 launch welt_launch od.launch.py
+    restart: unless-stopped
+    volumes:
+      - ${HOME}/welt:/welt
+
+  zed_ros2:
+      image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5
+      container_name: s_zed_ros2
+      # image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5-neural # for neural
+      # container_name: s_zed_ros2_neural # for neural
+      ipc: host
+      runtime: nvidia
+      gpus: all
+      privileged: true
+      volumes:
+        - /dev:/dev
+        - /dev/shm:/dev/shm
+        - /usr/local/zed/resources:/usr/local/zed/resources
+        - /usr/local/zed/settings:/usr/local/zed/settings
+      command: ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zedm
+
+  rviz2:
+    image: husarion/rviz2:humble-11.2.11-20240320
+    container_name: s_rviz2
+    ipc: host
+    environment:
+      - DISPLAY=${DISPLAY}
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    profiles:
+      - debug
+      - visualize
+
+  recorder:
+    image: ros:humble-ros-base
+    container_name: s_recorder
+    ipc: host
+    volumes:
+      - ${HOME}/rosbags:/rosbags
+    command: timeout 300 ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") --compression-mode file --compression-format zstd -a
+    profiles:
+      - debug
+    restart: no

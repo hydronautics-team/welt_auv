@@ -13,8 +13,8 @@ find_package(Boost REQUIRED COMPONENTS system)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
 find_package(serial REQUIRED)
-find_package(stingray_core_interfaces REQUIRED)
-find_package(stingray_core_communication REQUIRED)
+find_package(stingray_interfaces REQUIRED)
+# find_package(stingray_core_communication REQUIRED)
 
 include_directories(include)
 
@@ -33,20 +33,30 @@ add_executable(hardware_bridge_node
         include/welt_communication/messages/welt.h
         src/messages/welt.cpp
         )
-ament_target_dependencies(hardware_bridge_node rclcpp std_msgs std_srvs serial stingray_core_interfaces stingray_core_communication)
+ament_target_dependencies(hardware_bridge_node rclcpp std_msgs std_srvs serial stingray_interfaces)
 
-add_executable(udp_driver_node
-        src/udp_driver_node.cpp
+# udp_driver_receiver_node
+add_executable(udp_driver_receiver_node
+        src/udp_driver_receiver_node.cpp
         include/welt_communication/messages/welt.h
         src/messages/welt.cpp
         )
-ament_target_dependencies(udp_driver_node rclcpp Boost std_msgs std_srvs serial stingray_core_interfaces stingray_core_communication)
+ament_target_dependencies(udp_driver_receiver_node rclcpp Boost std_msgs std_srvs serial stingray_interfaces)
+
+# udp_driver_sender_node
+add_executable(udp_driver_sender_node
+        src/udp_driver_sender_node.cpp
+        include/welt_communication/messages/welt.h
+        src/messages/welt.cpp
+        )
+ament_target_dependencies(udp_driver_sender_node rclcpp Boost std_msgs std_srvs serial stingray_interfaces)
 
 
 ## Install executable
 install(TARGETS
         hardware_bridge_node
-        udp_driver_node
+        udp_driver_receiver_node
+        udp_driver_sender_node
         # ${PROJECT_NAME}
         DESTINATION lib/${PROJECT_NAME}
         # EXPORT ${PROJECT_NAME}
