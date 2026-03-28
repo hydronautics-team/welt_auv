@@ -17,7 +17,7 @@
                 "${workspaceFolder}/src/sauvc/src/stingray/src/stingray_core/src/stingray_core_communication/include",
                 "${workspaceFolder}/src/sauvc/src/stingray/src/stingray_core/src/serial/include",
                 "${workspaceFolder}/install/stingray_interfaces/include/stingray_interfaces",
-                "${workspaceFolder}/install/stingray_core_interfaces/include/stingray_core_interfaces",
+                "${workspaceFolder}/install/stingray_interfaces/include/stingray_interfaces",
                 "/opt/ros/iron/include/geometry_msgs",
                 "/opt/ros/iron/include/rclcpp_action"
             ],
