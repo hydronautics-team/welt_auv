@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-colcon build --packages-select sauvc_missions stingray_missions
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+exec "$ROOT_DIR/scripts/build.sh" missions
 

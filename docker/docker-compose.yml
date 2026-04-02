@@ -1,42 +1,31 @@
 services:
   welt_auv_control:
-    image: hydronautics/welt_auv:control
-    container_name: s_welt_auv_control
+    image: ${WELT_AUV_CONTROL_IMAGE:-hydronautics/welt_auv:control}
+    container_name: ${WELT_AUV_CONTROL_CONTAINER:-s_welt_auv_control}
     ipc: host
     network_mode: host
     command: ros2 launch welt_launch control.launch.py
     restart: unless-stopped
     volumes:
-      - ${HOME}/welt:/welt
+      - ${WELT_DATA_DIR:-${HOME}/welt}:/welt
+    profiles:
+      - core
 
 
   welt_auv_od:
-    image: hydronautics/welt_auv:od
-    container_name: s_welt_auv_od
+    image: ${WELT_AUV_OD_IMAGE:-hydronautics/welt_auv:od}
+    container_name: ${WELT_AUV_OD_CONTAINER:-s_welt_auv_od}
     ipc: host
-    platform: linux/arm64
-    runtime: nvidia
-    gpus: all
+    platform: ${WELT_AUV_OD_PLATFORM:-linux/arm64}
+    runtime: ${DOCKER_NVIDIA_RUNTIME:-nvidia}
+    gpus: ${DOCKER_GPUS:-all}
     command: ros2 launch welt_launch od.launch.py
     restart: unless-stopped
     volumes:
-      - ${HOME}/welt:/welt
-
-  zed_ros2:
-      image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5
-      container_name: s_zed_ros2
-      # image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5-neural # for neural
-      # container_name: s_zed_ros2_neural # for neural
-      ipc: host
-      runtime: nvidia
-      gpus: all
-      privileged: true
-      volumes:
-        - /dev:/dev
-        - /dev/shm:/dev/shm
-        - /usr/local/zed/resources:/usr/local/zed/resources
-        - /usr/local/zed/settings:/usr/local/zed/settings
-      command: ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zedm
+      - ${WELT_DATA_DIR:-${HOME}/welt}:/welt
+    profiles:
+      - core
+      - vision
 
   rviz2:
     image: husarion/rviz2:humble-11.2.11-20240320
@@ -55,8 +44,9 @@ services:
     container_name: s_recorder
     ipc: host
     volumes:
-      - ${HOME}/rosbags:/rosbags
-    command: timeout 300 ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") --compression-mode file --compression-format zstd -a
+      - ${ROSBAG_DIR:-${HOME}/rosbags}:/rosbags
+    command: >
+      bash -lc "timeout ${RECORDER_TIMEOUT_SEC:-300} ros2 bag record -o /rosbags/rosbag_$$(date +%d-%m-%y__%H-%M) --compression-mode file --compression-format zstd -a"
     profiles:
       - debug
     restart: no

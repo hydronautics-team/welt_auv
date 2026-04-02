@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source install/setup.bash && ros2 launch welt_launch od.launch.py
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT_DIR"
+exec ./scripts/launch_local.sh od
 
