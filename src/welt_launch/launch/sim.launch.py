@@ -18,12 +18,6 @@ def generate_launch_description():
     # core
     # hardware bridge
     # topic names
-    driver_request_topic_arg = DeclareLaunchArgument(
-        "driver_request_topic", default_value='/stingray/topics/driver_request'
-    )
-    driver_response_topic_arg = DeclareLaunchArgument(
-        "driver_response_topic", default_value='/stingray/topics/driver_response'
-    )
     uv_state_topic_arg = DeclareLaunchArgument(
         "uv_state_topic", default_value='/stingray/topics/uv_state'
     )
@@ -48,20 +42,6 @@ def generate_launch_description():
         "set_device_srv", default_value='/stingray/services/set_device'
     )
 
-    # udp driver
-    send_to_ip_arg = DeclareLaunchArgument(
-        "send_to_ip", default_value='10.42.0.111'
-    )
-    send_to_port_arg = DeclareLaunchArgument(
-        "send_to_port", default_value='13053'
-    )
-    receive_from_ip_arg = DeclareLaunchArgument(
-        "receive_from_ip", default_value='10.42.0.186'
-    )
-    receive_from_port_arg = DeclareLaunchArgument(
-        "receive_from_port", default_value='13050'
-    )
-
     # load ros config
     return LaunchDescription([
         uv_state_topic_arg,
@@ -71,12 +51,6 @@ def generate_launch_description():
         set_stabilization_srv_arg,
         enable_thrusters_srv_arg,
         set_device_srv_arg,
-        driver_request_topic_arg,
-        driver_response_topic_arg,
-        send_to_ip_arg,
-        send_to_port_arg,
-        receive_from_ip_arg,
-        receive_from_port_arg,
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(str(Path(
                 get_package_share_directory('sauvc_launch'), 'control.launch.py'))),
@@ -90,23 +64,4 @@ def generate_launch_description():
                 'set_device_srv': LaunchConfiguration("set_device_srv"),
             }.items(),
         ),
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource(str(Path(
-        #         get_package_share_directory('welt_launch'), 'com.launch.py'))),
-        #     launch_arguments={
-        #         'driver_request_topic': LaunchConfiguration("driver_request_topic"),
-        #         'driver_response_topic': LaunchConfiguration("driver_response_topic"),
-        #         'uv_state_topic': LaunchConfiguration("uv_state_topic"),
-        #         'device_state_array_topic': LaunchConfiguration("device_state_array_topic"),
-        #         'set_twist_srv': LaunchConfiguration("set_twist_srv"),
-        #         'set_stabilization_srv': LaunchConfiguration("set_stabilization_srv"),
-        #         'reset_imu_srv': LaunchConfiguration("reset_imu_srv"),
-        #         'enable_thrusters_srv': LaunchConfiguration("enable_thrusters_srv"),
-        #         'set_device_srv': LaunchConfiguration("set_device_srv"),
-        #         'send_to_ip': LaunchConfiguration("send_to_ip"),
-        #         'send_to_port': LaunchConfiguration("send_to_port"),
-        #         'receive_from_ip': LaunchConfiguration("receive_from_ip"),
-        #         'receive_from_port': LaunchConfiguration("receive_from_port"),
-        #     }.items(),
-        # ),
     ])
