@@ -59,6 +59,7 @@ case "$scenario" in
   control_shell)
     run_or_attach "welt_auv_control" -it --rm \
       --name "welt_auv_control" \
+      -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="$(pwd)",target=/welt_auv \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
@@ -70,6 +71,7 @@ case "$scenario" in
   control_launch)
     run_or_attach "welt_auv_control" -it --rm \
       --name "welt_auv_control" \
+      -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
       --ipc=host \
@@ -81,6 +83,7 @@ case "$scenario" in
     run_or_attach "welt_auv_control" -d \
       --name "welt_auv_control" \
       --restart unless-stopped \
+      -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="$(pwd)",target=/welt_auv \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
@@ -92,6 +95,7 @@ case "$scenario" in
   od_shell)
     run_or_attach "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
+      -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="$(pwd)",target=/welt_auv \
       --mount type=bind,source="/dev",target=/dev \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
@@ -105,6 +109,7 @@ case "$scenario" in
   od_launch)
     run_or_attach "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
+      -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
       --ipc=host \
@@ -116,6 +121,7 @@ case "$scenario" in
     run_or_attach "welt_auv_od" -d --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
       --restart unless-stopped \
+      -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="$(pwd)",target=/welt_auv \
       --mount type=bind,source="/dev",target=/dev \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \

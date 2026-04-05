@@ -28,7 +28,9 @@ profile="$1"
 [[ -f install/setup.bash ]] || die "Не найден install/setup.bash. Сначала соберите workspace."
 
 # shellcheck source=/dev/null
+set +u
 source install/setup.bash
+set -u
 
 case "$profile" in
   control)
