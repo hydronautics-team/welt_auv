@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
-source "$SCRIPT_DIR/lib/common.sh"
+source "$SCRIPT_DIR/common.sh"
 
 usage() {
   cat <<USAGE
@@ -30,7 +30,7 @@ if [[ $# -eq 2 ]]; then
   force="true"
 fi
 
-ROOT_DIR="$(repo_root_from_script "$SCRIPT_DIR")"
+ROOT_DIR="$(repo_root_from_script "${BASH_SOURCE[0]}")"
 cd "$ROOT_DIR"
 
 paths=()

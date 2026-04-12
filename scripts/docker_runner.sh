@@ -4,7 +4,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
-source "$SCRIPT_DIR/lib/common.sh"
+source "$SCRIPT_DIR/common.sh"
+
+ROOT_DIR="$(repo_root_from_script "${BASH_SOURCE[0]}")"
 
 require_cmd docker
 
@@ -60,7 +62,7 @@ case "$scenario" in
     run_or_attach "welt_auv_control" -it --rm \
       --name "welt_auv_control" \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
-      --mount type=bind,source="$(pwd)",target=/welt_auv \
+      --mount type=bind,source="$ROOT_DIR",target=/welt_auv \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
       --ipc=host \
@@ -84,7 +86,7 @@ case "$scenario" in
       --name "welt_auv_control" \
       --restart unless-stopped \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
-      --mount type=bind,source="$(pwd)",target=/welt_auv \
+      --mount type=bind,source="$ROOT_DIR",target=/welt_auv \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
       --ipc=host \
@@ -96,7 +98,7 @@ case "$scenario" in
     run_or_attach "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
-      --mount type=bind,source="$(pwd)",target=/welt_auv \
+      --mount type=bind,source="$ROOT_DIR",target=/welt_auv \
       --mount type=bind,source="/dev",target=/dev \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \
@@ -122,7 +124,7 @@ case "$scenario" in
       --name "welt_auv_od" \
       --restart unless-stopped \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
-      --mount type=bind,source="$(pwd)",target=/welt_auv \
+      --mount type=bind,source="$ROOT_DIR",target=/welt_auv \
       --mount type=bind,source="/dev",target=/dev \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
       --mount type=bind,source="/etc/localtime",target="/etc/localtime" \

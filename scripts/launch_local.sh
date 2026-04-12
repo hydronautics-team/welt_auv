@@ -4,7 +4,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
-source "$SCRIPT_DIR/lib/common.sh"
+source "$SCRIPT_DIR/common.sh"
+
+ROOT_DIR="$(repo_root_from_script "${BASH_SOURCE[0]}")"
+cd "$ROOT_DIR"
 
 usage() {
   cat <<USAGE

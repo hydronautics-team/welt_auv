@@ -3,10 +3,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # shellcheck source=/dev/null
-source "$SCRIPT_DIR/lib/common.sh"
+source "$SCRIPT_DIR/common.sh"
 
 require_cmd colcon
+
+cd "$ROOT_DIR"
 
 usage() {
   cat <<USAGE
@@ -41,7 +44,7 @@ case "$profile" in
     ;;
   control)
     packages=(
-      welt_communication welt_launch
+      welt_launch
       sauvc_launch sauvc_missions sauvc_movement sauvc_interfaces
       stingray_devices stingray_interfaces stingray_launch stingray_missions stingray_movement stingray_utils
       stingray_core_communication stingray_core_interfaces stingray_core_launch
