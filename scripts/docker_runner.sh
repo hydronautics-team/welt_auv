@@ -32,7 +32,7 @@ USAGE
 
 scenario="$1"
 
-run_or_attach() {
+run_or_attach_shell() {
   local container_name="$1"
   shift
 
@@ -57,9 +57,24 @@ run_or_attach() {
   docker run "$@"
 }
 
+run_fresh_container() {
+  local container_name="$1"
+  shift
+
+  local existing_container
+  existing_container=$(docker ps -aq -f name="^${container_name}$")
+  if [[ -n "$existing_container" ]]; then
+    log_info "Контейнер ${container_name} уже существует. Пересоздаем для чистого запуска..."
+    docker rm -f "$container_name" >/dev/null
+  fi
+
+  log_info "Запускаем новый контейнер ${container_name}..."
+  docker run "$@"
+}
+
 case "$scenario" in
   control_shell)
-    run_or_attach "welt_auv_control" -it --rm \
+    run_or_attach_shell "welt_auv_control" -it --rm \
       --name "welt_auv_control" \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="$ROOT_DIR",target=/welt_auv \
@@ -71,7 +86,7 @@ case "$scenario" in
     ;;
 
   control_launch)
-    run_or_attach "welt_auv_control" -it --rm \
+    run_fresh_container "welt_auv_control" -it --rm \
       --name "welt_auv_control" \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
@@ -82,7 +97,7 @@ case "$scenario" in
     ;;
 
   control_detached_launch)
-    run_or_attach "welt_auv_control" -d \
+    run_fresh_container "welt_auv_control" -d \
       --name "welt_auv_control" \
       --restart unless-stopped \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
@@ -95,7 +110,7 @@ case "$scenario" in
     ;;
 
   od_shell)
-    run_or_attach "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
+    run_or_attach_shell "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="$ROOT_DIR",target=/welt_auv \
@@ -109,7 +124,7 @@ case "$scenario" in
     ;;
 
   od_launch)
-    run_or_attach "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
+    run_fresh_container "welt_auv_od" -it --rm --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
       --mount type=bind,source="/etc/timezone",target="/etc/timezone" \
@@ -120,7 +135,7 @@ case "$scenario" in
     ;;
 
   od_detached_launch)
-    run_or_attach "welt_auv_od" -d --platform=linux/arm64 --gpus all --runtime nvidia \
+    run_fresh_container "welt_auv_od" -d --platform=linux/arm64 --gpus all --runtime nvidia \
       --name "welt_auv_od" \
       --restart unless-stopped \
       -e ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}" \
