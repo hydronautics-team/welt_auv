@@ -23,6 +23,34 @@ docker compose -f docker/docker-compose.yml config
 - `debug` — `rviz2`, `recorder`
 - `visualize` — `rviz2`
 
+### Запуск `welt_auv_od` + `rviz2` через VNC
+
+`rviz2` настроен на встроенный Qt VNC backend (без X11/`DISPLAY`).
+
+```bash
+cd /home/shakuevda/Desktop/hydro/ws_competition/welt_auv
+cp -n docker/.env.example docker/.env
+
+# OD + RViz2
+docker compose -f docker/docker-compose.yml --profile core --profile visualize up -d welt_auv_od rviz2
+```
+
+Подключение VNC-клиентом к хосту на порт из `RVIZ2_VNC_PORT` (по умолчанию `5901`).
+
+Проверка:
+
+```bash
+docker compose -f docker/docker-compose.yml ps
+docker compose -f docker/docker-compose.yml logs -f welt_auv_od rviz2
+```
+
+Если `welt_auv_od` ругается на `/welt_auv/install/setup.bash`, пересоберите vision-образ:
+
+```bash
+./scripts/build.sh vision
+docker compose -f docker/docker-compose.yml --profile core up -d --build welt_auv_od
+```
+
 Примеры:
 
 ```bash

@@ -16,6 +16,9 @@ services:
 
   welt_auv_od:
     image: ${WELT_AUV_OD_IMAGE:-hydronautics/welt_auv:od}
+    build:
+      context: ..
+      dockerfile: docker/od/Dockerfile
     container_name: ${WELT_AUV_OD_CONTAINER:-s_welt_auv_od}
     ipc: host
     platform: ${WELT_AUV_OD_PLATFORM:-linux/arm64}
@@ -36,10 +39,11 @@ services:
     container_name: s_rviz2
     ipc: host
     environment:
-      - DISPLAY=${DISPLAY}
+      - QT_QPA_PLATFORM=vnc:size=${RVIZ2_VNC_SIZE:-1920x1080}:port=${RVIZ2_VNC_PORT:-5901}
       - ROS_DOMAIN_ID=${ROS_DOMAIN_ID:-1}
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
+    ports:
+      - ${RVIZ2_VNC_PORT:-5901}:${RVIZ2_VNC_PORT:-5901}
+    command: rviz2
     profiles:
       - debug
       - visualize
