@@ -1,18 +1,15 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-# echo "[DOCKER-INFO] Запускаем сборку..."
-# Выполняем сборку, при ошибке выходим
+source /opt/ros/humble/setup.bash
+for setup_file in \
+  /additional_packages/install/setup.bash \
+  /welt_auv/install/setup.bash
+do
+  if [[ -f "${setup_file}" ]]; then
+    source "${setup_file}"
+  fi
+done
 
-source "/opt/ros/humble/setup.bash"
-source "/additional_packages/install/setup.bash"
-source /welt_auv/install/setup.bash
-
-# if ! ./bc; then
-#   echo "[DOCKER-ERROR] Сборка завершилась с ошибкой. Выходим..."
-#   exit 1
-# fi
-# echo "[DOCKER-INFO] Сборка завершена успешно. Выполняем source install/setup.bash..."
-# source /welt_auv/install/setup.bash
-
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}"
 exec "$@"

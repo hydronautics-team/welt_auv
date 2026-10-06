@@ -1,18 +1,17 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -euo pipefail
 
-# echo "[DOCKER-INFO] Запускаем сборку..."
-# Выполняем сборку, при ошибке выходим
+source /opt/ros/humble/setup.bash
+if [[ -f /welt_auv/install/setup.bash ]]; then
+  source /welt_auv/install/setup.bash
+fi
 
-source "/opt/ros/humble/install/setup.bash"
-source "/additional_packages/install/setup.bash"
-source /welt_auv/install/setup.bash
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}"
 
-# if ! ./bv; then
-#   echo "[DOCKER-ERROR] Сборка завершилась с ошибкой. Выходим..."
-#   exit 1
-# fi
-# echo "[DOCKER-INFO] Сборка завершена успешно. Выполняем source install/setup.bash..."
-# source /welt_auv/install/setup.bash
+if [[ ! -r "${YOLO_WEIGHTS_PATH:-/models/yolov8.pt}" ]]; then
+  echo "[ERROR] YOLO weights are missing: ${YOLO_WEIGHTS_PATH:-/models/yolov8.pt}" >&2
+  echo "[ERROR] Set YOLO_WEIGHTS in .env to the host path of yolov8.pt." >&2
+  exit 64
+fi
 
 exec "$@"

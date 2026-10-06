@@ -1,0 +1,11 @@
+**/.git
+**/.github
+**/__pycache__
+**/.pytest_cache
+**/build
+**/install
+**/log
+**/*.pyc
+**/*.bag
+**/*.db3
+.vscode

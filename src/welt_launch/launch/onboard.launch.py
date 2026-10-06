@@ -1,0 +1,20 @@
+from pathlib import Path
+
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+
+
+def generate_launch_description():
+    welt_launch = Path(get_package_share_directory('welt_launch'))
+    planning_launch = Path(get_package_share_directory('stingray_planning'))
+
+    return LaunchDescription([
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(str(welt_launch / 'control.launch.py')),
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(str(planning_launch / 'launch' / 'planning.launch.py')),
+        ),
+    ])

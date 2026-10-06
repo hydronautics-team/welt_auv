@@ -1,62 +1,77 @@
 services:
-  welt_auv_control:
-    image: hydronautics/welt_auv:control
-    container_name: s_welt_auv_control
-    ipc: host
+  control:
+    build:
+      context: ..
+      dockerfile: docker/control/Dockerfile
+    image: ${CONTROL_IMAGE:-hydronautics/welt_auv:control}
+    container_name: welt_auv_control
     network_mode: host
-    command: ros2 launch welt_launch control.launch.py
-    restart: unless-stopped
-    volumes:
-      - ${HOME}/welt:/welt
-
-
-  welt_auv_od:
-    image: hydronautics/welt_auv:od
-    container_name: s_welt_auv_od
     ipc: host
+    privileged: true
+    restart: unless-stopped
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+    volumes:
+      - /dev:/dev
+      - /etc/localtime:/etc/localtime:ro
+    command: ros2 launch stingray_planning planning.launch.py
+
+  yolo:
     platform: linux/arm64
+    build:
+      context: ..
+      dockerfile: docker/od/Dockerfile
+      args:
+        YOLO_BASE_IMAGE: ${YOLO_BASE_IMAGE:-hydronautics/od:l4t-r36.3.0}
+    image: ${YOLO_IMAGE:-hydronautics/welt_auv:yolo}
+    container_name: welt_auv_yolo
+    network_mode: host
+    ipc: host
+    privileged: true
     runtime: nvidia
     gpus: all
-    command: ros2 launch welt_launch od.launch.py
     restart: unless-stopped
-    volumes:
-      - ${HOME}/welt:/welt
-
-  zed_ros2:
-      image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5
-      container_name: s_zed_ros2
-      # image: hydronautics/zed_ros2:humble-l4t-r36.3.0-s4.2.5-neural # for neural
-      # container_name: s_zed_ros2_neural # for neural
-      ipc: host
-      runtime: nvidia
-      gpus: all
-      privileged: true
-      volumes:
-        - /dev:/dev
-        - /dev/shm:/dev/shm
-        - /usr/local/zed/resources:/usr/local/zed/resources
-        - /usr/local/zed/settings:/usr/local/zed/settings
-      command: ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zedm
-
-  rviz2:
-    image: husarion/rviz2:humble-11.2.11-20240320
-    container_name: s_rviz2
-    ipc: host
     environment:
-      - DISPLAY=${DISPLAY}
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      YOLO_WEIGHTS_PATH: /models/yolov8.pt
     volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    profiles:
-      - debug
-      - visualize
+      - /dev/shm:/dev/shm
+      - ${YOLO_WEIGHTS:-/opt/welt/models/yolov8.pt}:/models/yolov8.pt:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: >-
+      ros2 launch welt_launch yolo.launch.py
+      weights_path:=/models/yolov8.pt
+      debug:=${YOLO_DEBUG:-False}
 
-  recorder:
-    image: ros:humble-ros-base
-    container_name: s_recorder
+  zed:
+    platform: linux/arm64
+    build:
+      context: ..
+      dockerfile: docker/zed/Dockerfile
+      args:
+        ZED_BASE_IMAGE: ${ZED_BASE_IMAGE:-stereolabs/zed:5.5-devel-l4t-r36.5}
+        ZED_WRAPPER_REF: ${ZED_WRAPPER_REF:-master}
+    image: ${ZED_IMAGE:-hydronautics/welt_auv:zed}
+    container_name: welt_auv_zed
+    network_mode: host
     ipc: host
+    privileged: true
+    runtime: nvidia
+    gpus: all
+    restart: unless-stopped
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
     volumes:
-      - ${HOME}/rosbags:/rosbags
-    command: timeout 300 ros2 bag record -o /rosbags/rosbag_$(date +%d-%m-%y__%H-%M") --compression-mode file --compression-format zstd -a
-    profiles:
-      - debug
-    restart: no
+      - /dev:/dev
+      - /dev/shm:/dev/shm
+      - /usr/local/zed/resources:/usr/local/zed/resources:ro
+      - /usr/local/zed/settings:/usr/local/zed/settings
+      - /etc/localtime:/etc/localtime:ro
+    command: ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zedm

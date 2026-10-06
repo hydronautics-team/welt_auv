@@ -1,0 +1,13 @@
+services:
+  control:
+    volumes:
+      - ..:/workspace
+    command: sleep infinity
+
+  yolo:
+    volumes:
+      - ..:/workspace
+    command: sleep infinity
+
+  zed:
+    command: sleep infinity
