@@ -38,7 +38,7 @@ RUN mkdir -p src && \
     source /opt/ros/${ROS_DISTRO}/setup.bash && \
     rosdep install --from-paths src --ignore-src -r -y --rosdistro ${ROS_DISTRO} && \
     rm -rf /var/lib/apt/lists/* && \
-    colcon build --merge-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 COPY docker/zed/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -11,3 +11,5 @@ if [[ -f .env ]]; then
 fi
 
 docker compose up -d --build zed
+exec docker compose exec zed bash -lc \
+  'source /opt/ros/humble/setup.bash && source /opt/zed_ros2_ws/install/setup.bash && exec bash -i'

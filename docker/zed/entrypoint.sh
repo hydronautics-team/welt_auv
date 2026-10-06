@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 source "/opt/ros/${ROS_DISTRO:-humble}/setup.bash"
 source /opt/zed_ros2_ws/install/setup.bash

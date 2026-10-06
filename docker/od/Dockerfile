@@ -17,7 +17,7 @@ WORKDIR /welt_auv
 COPY . /welt_auv
 
 RUN source /opt/ros/humble/setup.bash && \
-    colcon build --merge-install --cmake-args -DCMAKE_BUILD_TYPE=Release \
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release \
       --packages-select \
         stingray_interfaces \
         stingray_object_detection \

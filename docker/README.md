@@ -58,6 +58,9 @@ Each service can also be built and started separately:
 
 `run-yolo.sh` checks that `YOLO_WEIGHTS` points to an existing weights file.
 The variable can be set in `docker/.env` or exported in the shell.
+After starting its service, each script opens an interactive shell in the
+container with the ROS workspace `install/setup.bash` already sourced. Exit
+the shell with `exit`; the container continues running in the background.
 
 The control container starts `stingray_planning planning.launch.py`. The ZED container
 publishes `/zed/zed_node/rgb/image_rect_color` and camera info. The YOLO

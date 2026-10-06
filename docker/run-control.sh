@@ -11,3 +11,5 @@ if [[ -f .env ]]; then
 fi
 
 docker compose up -d --build control
+exec docker compose exec control bash -lc \
+  'source /opt/ros/humble/setup.bash && source /welt_auv/install/setup.bash && exec bash -i'
