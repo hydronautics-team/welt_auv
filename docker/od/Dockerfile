@@ -10,7 +10,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       python3-colcon-common-extensions \
       python3-pip \
       ros-humble-cv-bridge \
-      ros-humble-image-transport && \
+      ros-humble-image-transport \
+      ros-humble-usb-cam && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /welt_auv
@@ -23,6 +24,7 @@ RUN source /opt/ros/humble/setup.bash && \
         stingray_object_detection \
         sauvc_object_detection \
         stingray_launch \
+        welt_cam \
         welt_launch
 
 COPY docker/od/entrypoint.sh /entrypoint.sh

@@ -62,6 +62,28 @@ After starting its service, each script opens an interactive shell in the
 container with the ROS workspace `install/setup.bash` already sourced. Exit
 the shell with `exit`; the container continues running in the background.
 
+The YOLO detector accepts any ROS 2 camera that publishes matching
+`sensor_msgs/Image` and `sensor_msgs/CameraInfo` topics. The onboard defaults
+process the front ZED and start the permanent bottom USB camera in the YOLO
+container. Configure its device in `docker/.env`:
+
+```bash
+BOTTOM_CAMERA_DEVICE=/dev/video2
+```
+
+For multiple cameras, put topics in corresponding list positions. Both lists
+must have the same length. Detection output is published as
+`stingray_interfaces/msg/BboxArray` at `<image_topic>/bbox_array`.
+
+To test only one source, replace both lists and disable the unused USB driver
+when needed. For example, ZED only:
+
+```bash
+YOLO_IMAGE_TOPIC_LIST=[/zed/zed_node/rgb/color/rect/image]
+YOLO_CAMERA_INFO_TOPIC_LIST=[/zed/zed_node/rgb/color/rect/camera_info]
+ENABLE_BOTTOM_CAMERA=False
+```
+
 The control container starts `stingray_planning planning.launch.py`. The ZED container
 publishes `/zed/zed_node/rgb/image_rect_color` and camera info. The YOLO
 container consumes those topics and publishes detections under the image topic

@@ -39,12 +39,17 @@ services:
       NVIDIA_DRIVER_CAPABILITIES: compute,utility
       YOLO_WEIGHTS_PATH: /models/yolov8.pt
     volumes:
+      - /dev:/dev
       - /dev/shm:/dev/shm
       - ${YOLO_WEIGHTS:-/opt/welt/models/yolov8.pt}:/models/yolov8.pt:ro
       - /etc/localtime:/etc/localtime:ro
     command: >-
       ros2 launch welt_launch yolo.launch.py
       weights_path:=/models/yolov8.pt
+      image_topic_list:=${YOLO_IMAGE_TOPIC_LIST:-[/zed/zed_node/rgb/color/rect/image,/stingray/topics/camera/bottom]}
+      camera_info_topic_list:=${YOLO_CAMERA_INFO_TOPIC_LIST:-[/zed/zed_node/rgb/color/rect/camera_info,/stingray/topics/camera/bottom/camera_info]}
+      enable_bottom_camera:=${ENABLE_BOTTOM_CAMERA:-True}
+      bottom_camera_device:=${BOTTOM_CAMERA_DEVICE:-/dev/video2}
       debug:=${YOLO_DEBUG:-False}
 
   zed:
