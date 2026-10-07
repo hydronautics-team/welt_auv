@@ -6,7 +6,14 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV ROS_DOMAIN_ID=1
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+ARG ROS_APT_SOURCE_VERSION=1.3.0
+ADD https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.jammy_all.deb /tmp/ros2-apt-source.deb
+
+RUN rm -f /etc/apt/sources.list.d/*ros* && \
+    dpkg -i /tmp/ros2-apt-source.deb && \
+    rm -f /tmp/ros2-apt-source.deb && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && apt-get install -y --no-install-recommends \
       python3-colcon-common-extensions \
       python3-pip \
       ros-humble-cv-bridge \

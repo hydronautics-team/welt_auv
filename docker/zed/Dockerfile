@@ -3,6 +3,7 @@ FROM ${ZED_BASE_IMAGE}
 
 ARG ROS_DISTRO=humble
 ARG ZED_WRAPPER_REF=master
+ARG ROS_APT_SOURCE_VERSION=1.3.0
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROS_DISTRO=${ROS_DISTRO}
 ENV ROS_DOMAIN_ID=1
@@ -11,7 +12,10 @@ ENV NVIDIA_DRIVER_CAPABILITIES=all
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+ADD https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.jammy_all.deb /tmp/ros2-apt-source.deb
+
+RUN rm -f /etc/apt/sources.list.d/*ros* && \
+    apt-get update && apt-get install -y --no-install-recommends \
       curl \
       git \
       gnupg2 \
@@ -21,10 +25,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       python3-rosdep \
       software-properties-common && \
     locale-gen en_US en_US.UTF-8 && \
-    curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
-      -o /usr/share/keyrings/ros-archive-keyring.gpg && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo ${UBUNTU_CODENAME}) main" \
-      > /etc/apt/sources.list.d/ros2.list && \
+    rm -f /etc/apt/sources.list.d/*ros* && \
+    dpkg -i /tmp/ros2-apt-source.deb && \
+    rm -f /tmp/ros2-apt-source.deb && \
+    rm -rf /var/lib/apt/lists/* && \
     apt-get update && apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-ros-base && \
     rm -rf /var/lib/apt/lists/*
 
