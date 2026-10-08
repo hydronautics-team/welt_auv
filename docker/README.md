@@ -84,7 +84,8 @@ YOLO_CAMERA_INFO_TOPIC_LIST=[/zed/zed_node/rgb/color/rect/camera_info]
 ENABLE_BOTTOM_CAMERA=False
 ```
 
-The control container starts `stingray_planning planning.launch.py`. The ZED container
+The control container starts `stingray_planning pool_test.launch.py`, including the
+empty pool map used by the current 2D planner. The ZED container
 publishes `/zed/zed_node/rgb/image_rect_color` and camera info. The YOLO
 container consumes those topics and publishes detections under the image topic
 as `bbox_array`.

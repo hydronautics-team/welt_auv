@@ -15,7 +15,7 @@ services:
     volumes:
       - /dev:/dev
       - /etc/localtime:/etc/localtime:ro
-    command: ros2 launch stingray_planning planning.launch.py
+    command: ros2 launch stingray_planning pool_test.launch.py
 
   yolo:
     platform: linux/arm64
