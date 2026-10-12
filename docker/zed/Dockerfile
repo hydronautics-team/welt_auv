@@ -17,15 +17,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       gnupg2 \
       locales \
       lsb-release \
-      python3-colcon-common-extensions \
-      python3-rosdep \
+
       software-properties-common && \
     locale-gen en_US en_US.UTF-8 && \
     curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
       -o /usr/share/keyrings/ros-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo ${UBUNTU_CODENAME}) main" \
       > /etc/apt/sources.list.d/ros2.list && \
-    apt-get update && apt-get install -y --no-install-recommends ros-${ROS_DISTRO}-ros-base && \
+    apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-ros-base \
+    python3-colcon-common-extensions \
+    python3-rosdep && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/zed_ros2_ws
