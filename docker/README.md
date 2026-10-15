@@ -56,6 +56,9 @@ Each service can also be built and started separately:
 ./docker/run-zed.sh
 ```
 
+`run-zed.sh` starts the service from the existing image without rebuilding it.
+Build a changed ZED image explicitly with `docker compose build zed`.
+
 `run-yolo.sh` checks that `YOLO_WEIGHTS` points to an existing weights file.
 The variable can be set in `docker/.env` or exported in the shell.
 After starting its service, each script opens an interactive shell in the
