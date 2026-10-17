@@ -10,10 +10,13 @@ if [[ -f .env ]]; then
   set +a
 fi
 
-if [[ -z "${YOLO_WEIGHTS:-}" || ! -f "$YOLO_WEIGHTS" ]]; then
-  echo "Set YOLO_WEIGHTS to an existing weights file in docker/.env or the environment." >&2
+weights_path="${YOLO_WEIGHTS:-../src/sauvc/src/sauvc_object_detection/weights/yolov8.pt}"
+if [[ ! -f "$weights_path" ]]; then
+  echo "YOLO weights are missing: $weights_path" >&2
+  echo "Put the model there as yolov8.pt or set YOLO_WEIGHTS in docker/.env." >&2
   exit 1
 fi
+export YOLO_WEIGHTS="$weights_path"
 
 docker compose up -d --build yolo
 exec docker compose exec yolo bash -lc \

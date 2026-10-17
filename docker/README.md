@@ -11,8 +11,9 @@ All three containers must use the same `ROS_DOMAIN_ID`. The default is `1`, matc
 
 ## Prepare
 
-Copy the example environment file and set the absolute path to the trained
-weights file:
+Put the trained model at
+`src/sauvc/src/sauvc_object_detection/weights/yolov8.pt`. Alternatively, copy
+the example environment file and set `YOLO_WEIGHTS` to another path:
 
 ```bash
 cd docker
@@ -20,7 +21,9 @@ cp .env.example .env
 $EDITOR .env
 ```
 
-The repository does not contain `yolov8.pt`, so `YOLO_WEIGHTS` is required.
+The repository does not contain `yolov8.pt`. Model files are excluded from Git
+and from the Docker build context; the selected file is mounted read-only at
+runtime.
 The target computer must have NVIDIA Container Toolkit and the ZED SDK host
 resources used by the official `stereolabs/zed` image.
 The control and YOLO base images are stored in the Hydronautics registry; run
@@ -38,6 +41,14 @@ commands to `/control/data`.
 docker compose build
 docker compose up -d
 docker compose logs -f
+```
+
+For an object-detection-only test, start ZED and YOLO together from the
+repository root:
+
+```bash
+./docker/run-object-detection.sh
+docker compose -f docker/docker-compose.yml logs -f zed yolo
 ```
 
 Stop the stack with `docker compose down`. To publish the images use:
@@ -65,10 +76,14 @@ After starting its service, each script opens an interactive shell in the
 container with the ROS workspace `install/setup.bash` already sourced. Exit
 the shell with `exit`; the container continues running in the background.
 
-The control container starts `stingray_planning planning.launch.py`. The ZED container
-publishes `/zed/zed_node/rgb/image_rect_color` and camera info. The YOLO
-container consumes those topics and publishes detections under the image topic
-as `bbox_array`.
+The control container starts `stingray_planning planning.launch.py`. With ZED
+Wrapper 5.1 or newer, the ZED container publishes
+`/zed/zed_node/rgb/color/rect/image` and the matching `camera_info` topic. The
+YOLO container consumes those topics and publishes detections at
+`/zed/zed_node/rgb/color/rect/image/bbox_array`. Set `ZED_IMAGE_TOPIC` and
+`ZED_CAMERA_INFO_TOPIC` in `.env` when using an older wrapper or a custom camera
+namespace. Detection is enabled at startup by default; set
+`YOLO_ENABLED_ON_START=False` to retain topic-controlled activation.
 
 ## Development mode
 

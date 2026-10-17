@@ -40,12 +40,15 @@ services:
       YOLO_WEIGHTS_PATH: /models/yolov8.pt
     volumes:
       - /dev/shm:/dev/shm
-      - ${YOLO_WEIGHTS:-/opt/welt/models/yolov8.pt}:/models/yolov8.pt:ro
+      - ${YOLO_WEIGHTS:-../src/sauvc/src/sauvc_object_detection/weights/yolov8.pt}:/models/yolov8.pt:ro
       - /etc/localtime:/etc/localtime:ro
     command: >-
       ros2 launch welt_launch yolo.launch.py
       weights_path:=/models/yolov8.pt
       debug:=${YOLO_DEBUG:-False}
+      image_topic:=${ZED_IMAGE_TOPIC:-/zed/zed_node/rgb/color/rect/image}
+      camera_info_topic:=${ZED_CAMERA_INFO_TOPIC:-/zed/zed_node/rgb/color/rect/camera_info}
+      enabled_on_start:=${YOLO_ENABLED_ON_START:-True}
 
   zed:
     platform: linux/arm64
@@ -76,4 +79,6 @@ services:
       - /usr/local/zed/settings:/usr/local/zed/settings
       - /etc/localtime:/etc/localtime:ro
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-    command: ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zedm
+    command: >-
+      ros2 launch zed_wrapper zed_camera.launch.py
+      camera_model:=${ZED_CAMERA_MODEL:-zedm}

@@ -8,4 +8,5 @@
 **/*.pyc
 **/*.bag
 **/*.db3
+**/*.pt
 .vscode
