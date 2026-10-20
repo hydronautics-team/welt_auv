@@ -12,7 +12,8 @@ fi
 
 export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}"
 
-if [[ ! -r "${YOLO_WEIGHTS_PATH:-/models/yolov8.pt}" ]]; then
+if [[ "$*" == *"yolo.launch.py"* ]] && \
+   [[ ! -r "${YOLO_WEIGHTS_PATH:-/models/yolov8.pt}" ]]; then
   echo "[ERROR] YOLO weights are missing: ${YOLO_WEIGHTS_PATH:-/models/yolov8.pt}" >&2
   echo "[ERROR] Set YOLO_WEIGHTS in .env to the host path of yolov8.pt." >&2
   exit 64

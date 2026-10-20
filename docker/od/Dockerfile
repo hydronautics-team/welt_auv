@@ -13,6 +13,7 @@ RUN source /opt/ros/humble/install/setup.bash && \
     colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release \
       --packages-select \
         stingray_interfaces \
+        stingray_cam \
         stingray_object_detection \
         sauvc_object_detection \
         stingray_launch \

@@ -46,9 +46,39 @@ services:
       ros2 launch welt_launch yolo.launch.py
       weights_path:=/models/yolov8.pt
       debug:=${YOLO_DEBUG:-False}
-      image_topic:=${ZED_IMAGE_TOPIC:-/zed/zed_node/rgb/color/rect/image}
-      camera_info_topic:=${ZED_CAMERA_INFO_TOPIC:-/zed/zed_node/rgb/color/rect/camera_info}
+      image_topic:=${FRONT_CAMERA_IMAGE_TOPIC:-/zed/zed_node/rgb/color/rect/image}
+      camera_info_topic:=${FRONT_CAMERA_INFO_TOPIC:-/zed/zed_node/rgb/color/rect/camera_info}
       enabled_on_start:=${YOLO_ENABLED_ON_START:-True}
+
+  front-camera:
+    platform: linux/arm64
+    build:
+      context: ..
+      dockerfile: docker/od/Dockerfile
+      args:
+        YOLO_BASE_IMAGE: ${YOLO_BASE_IMAGE:-hydronautics/od:l4t-r36.3.0}
+    image: ${YOLO_IMAGE:-hydronautics/welt_auv:yolo}
+    container_name: welt_auv_front_camera
+    network_mode: host
+    ipc: host
+    privileged: true
+    restart: unless-stopped
+    profiles: [usb-camera]
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+    volumes:
+      - /dev:/dev
+      - /etc/localtime:/etc/localtime:ro
+    command: >-
+      ros2 run stingray_cam usb_camera --ros-args
+      -p video_device:=${USB_CAMERA_DEVICE:-/dev/video0}
+      -p image_topic:=/stingray/topics/camera/front
+      -p camera_info_topic:=/stingray/topics/camera/front/camera_info
+      -p camera_info_url:=/welt_auv/install/stingray_cam/share/stingray_cam/configs/camera.yaml
+      -p image_width:=${USB_CAMERA_WIDTH:-640}
+      -p image_height:=${USB_CAMERA_HEIGHT:-480}
+      -p framerate:=${USB_CAMERA_FPS:-30.0}
 
   zed:
     platform: linux/arm64

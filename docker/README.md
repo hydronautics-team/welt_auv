@@ -21,6 +21,20 @@ cp .env.example .env
 $EDITOR .env
 ```
 
+Select the front camera in `docker/.env`:
+
+```dotenv
+# ZED camera
+FRONT_CAMERA_TYPE=zed
+
+# Or a regular V4L2/USB camera
+FRONT_CAMERA_TYPE=usb
+USB_CAMERA_DEVICE=/dev/video0
+```
+
+`run-object-detection.sh` starts the selected camera, stops the other camera
+service, and configures YOLO with the matching image and camera-info topics.
+
 The repository does not contain `yolov8.pt`. Model files are excluded from Git
 and from the Docker build context; the selected file is mounted read-only at
 runtime.
@@ -84,6 +98,11 @@ YOLO container consumes those topics and publishes detections at
 `ZED_CAMERA_INFO_TOPIC` in `.env` when using an older wrapper or a custom camera
 namespace. Detection is enabled at startup by default; set
 `YOLO_ENABLED_ON_START=False` to retain topic-controlled activation.
+
+With `FRONT_CAMERA_TYPE=usb`, the regular camera publishes to
+`/stingray/topics/camera/front`, camera calibration is published to
+`/stingray/topics/camera/front/camera_info`, and detections are published to
+`/stingray/topics/camera/front/bbox_array`.
 
 ## Development mode
 
