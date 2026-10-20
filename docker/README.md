@@ -112,7 +112,7 @@ For YOLO:
 
 ```bash
 cd /workspace
-source /opt/ros/humble/setup.bash
+source /opt/ros/humble/install/setup.bash
 colcon build --symlink-install --packages-select \
   stingray_interfaces stingray_object_detection sauvc_object_detection \
   stingray_launch welt_launch

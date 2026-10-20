@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-source /opt/ros/humble/setup.bash
+if [[ -f /opt/ros/humble/install/setup.bash ]]; then
+  source /opt/ros/humble/install/setup.bash
+else
+  source /opt/ros/humble/setup.bash
+fi
 if [[ -f /welt_auv/install/setup.bash ]]; then
   source /welt_auv/install/setup.bash
 fi

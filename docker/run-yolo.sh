@@ -20,4 +20,4 @@ export YOLO_WEIGHTS="$weights_path"
 
 docker compose up -d --build yolo
 exec docker compose exec yolo bash -lc \
-  'source /opt/ros/humble/setup.bash && source /welt_auv/install/setup.bash && exec bash -i'
+  'source /opt/ros/humble/install/setup.bash && source /welt_auv/install/setup.bash && exec bash -i'
