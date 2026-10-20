@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       gnupg2 \
       locales \
       lsb-release \
-
       software-properties-common && \
     locale-gen en_US en_US.UTF-8 && \
     curl -fsSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
