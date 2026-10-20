@@ -9,7 +9,7 @@ COPY . /welt_auv
 RUN source /opt/ros/humble/setup.bash && \
     if [[ -f /additional_packages/install/setup.bash ]]; then source /additional_packages/install/setup.bash; fi && \
     colcon build \
-      --packages-select stingray_planning \
+      --packages-select stingray_interfaces stingray_planning \
       --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 COPY docker/control/entrypoint.sh /entrypoint.sh
