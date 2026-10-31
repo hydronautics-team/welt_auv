@@ -28,7 +28,7 @@ case "$camera_type" in
     export FRONT_CAMERA_IMAGE_TOPIC="${ZED_IMAGE_TOPIC:-/zed/zed_node/rgb/color/rect/image}"
     export FRONT_CAMERA_INFO_TOPIC="${ZED_CAMERA_INFO_TOPIC:-/zed/zed_node/rgb/color/rect/camera_info}"
     docker compose --profile usb-camera stop front-camera
-    docker compose up -d --build zed yolo
+    docker compose up -d zed yolo
     docker compose ps zed yolo
     ;;
   usb)
@@ -39,7 +39,7 @@ case "$camera_type" in
       exit 1
     fi
     docker compose stop zed
-    docker compose --profile usb-camera up -d --build front-camera yolo
+    docker compose --profile usb-camera up -d front-camera yolo
     docker compose --profile usb-camera ps front-camera yolo
     ;;
   *)

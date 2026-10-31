@@ -65,6 +65,13 @@ repository root:
 docker compose -f docker/docker-compose.yml logs -f zed yolo
 ```
 
+The run script reuses existing images and does not rebuild them. Rebuild only
+after changing a Dockerfile, build arguments, dependencies, or source code:
+
+```bash
+docker compose -f docker/docker-compose.yml build zed yolo
+```
+
 Stop the stack with `docker compose down`. To publish the images use:
 
 ```bash
