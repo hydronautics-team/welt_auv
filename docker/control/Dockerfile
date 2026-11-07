@@ -20,4 +20,4 @@ COPY docker/control/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["ros2", "launch", "stingray_planning", "pool_test.launch.py"]
+CMD ["ros2", "launch", "stingray_planning", "mission_pool_test.launch.py"]

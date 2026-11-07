@@ -97,8 +97,9 @@ After starting its service, each script opens an interactive shell in the
 container with the ROS workspace `install/setup.bash` already sourced. Exit
 the shell with `exit`; the container continues running in the background.
 
-The control container starts `stingray_planning pool_test.launch.py`, including
-the empty pool map used by the planner test. With ZED
+The control container starts `stingray_planning mission_pool_test.launch.py`,
+including the planner, mission FSM, and empty pool map used by the integrated
+go-to-point test. With ZED
 Wrapper 5.1 or newer, the ZED container publishes
 `/zed/zed_node/rgb/color/rect/image` and the matching `camera_info` topic. The
 YOLO container consumes those topics and publishes detections at
