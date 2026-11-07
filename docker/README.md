@@ -113,6 +113,63 @@ With `FRONT_CAMERA_TYPE=usb`, the regular camera publishes to
 `/stingray/topics/camera/front/camera_info`, and detections are published to
 `/stingray/topics/camera/front/bbox_array`.
 
+## USB gate mission test
+
+The gate test uses the new `welt_rov` automatic-control contract: a
+`geometry_msgs/Twist` on `/control/data` contains bounded body-frame position
+offsets, not legacy thruster percentages. The old `SetTwist` service is not
+used by this mission.
+
+Start the safe dry run first. It publishes commands to `/control/data_test`,
+which is not consumed by `stingray_core`:
+
+```bash
+./docker/run-gate-test.sh --dry-run
+```
+
+After verifying camera detections, command signs, control mode, loop flags,
+and the physical emergency stop, explicitly enable the real output:
+
+```bash
+GATE_REAL_CONTROL=YES ./docker/run-gate-test.sh --real
+```
+
+Start the FSM scenario with:
+
+```bash
+ros2 service call /stingray/services/transition \
+  stingray_interfaces/srv/SetTransition \
+  "{transition: gate_usb_test}"
+```
+
+The safe mission parameters limit each visual correction to 0.75 m forward
+and 0.3 m laterally. The final pass command is a 0.75 m relative offset. The
+mission stops on stale detections or timeout and publishes a zero offset when
+leaving either movement state.
+
+Before a real run, start `welt_rov`/`stingray_core`, verify fresh odometry and
+put control into automatic mode with all six hold loops enabled:
+
+```bash
+ros2 topic hz /core/state/odometry
+ros2 topic pub --once /control/mode std_msgs/msg/UInt8 "{data: 2}"
+ros2 topic pub --once /control/loop_flags std_msgs/msg/UInt8 "{data: 63}"
+```
+
+Place the vehicle between 2.0 and 2.75 m from the gate before starting. A
+farther detection is rejected instead of repeatedly extending the relative
+position target. First verify that a gate on the image right produces positive
+`linear.y` on `/control/data_test`; the project body convention uses +Y right.
+
+Emergency stop:
+
+```bash
+ros2 topic pub --once /control/data geometry_msgs/msg/Twist "{}"
+ros2 topic pub --once /control/loop_flags std_msgs/msg/UInt8 "{data: 0}"
+ros2 topic pub --once /control/mode std_msgs/msg/UInt8 "{data: 0}"
+docker compose -f docker/docker-compose.yml --profile gate-test stop gate-test
+```
+
 ## Development mode
 
 Container image layers are immutable. For editing, the development override

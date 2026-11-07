@@ -17,6 +17,26 @@ services:
       - /etc/localtime:/etc/localtime:ro
     command: ros2 launch stingray_planning mission_pool_test.launch.py
 
+  gate-test:
+    build:
+      context: ..
+      dockerfile: docker/control/Dockerfile
+    image: ${CONTROL_IMAGE:-hydronautics/welt_auv:control}
+    container_name: welt_auv_gate_test
+    network_mode: host
+    ipc: host
+    privileged: true
+    restart: unless-stopped
+    profiles: [gate-test]
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    command: >-
+      ros2 launch sauvc_missions gate_usb_test.launch.py
+      control_data_topic:=${GATE_CONTROL_TOPIC:-/control/data_test}
+
   yolo:
     platform: linux/arm64
     build:

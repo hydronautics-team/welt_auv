@@ -14,6 +14,8 @@ RUN source /opt/ros/humble/setup.bash && \
         stingray_utils \
         stingray_planning \
         stingray_missions \
+        sauvc_interfaces \
+        sauvc_missions \
       --cmake-args -DCMAKE_BUILD_TYPE=Release
 
 COPY docker/control/entrypoint.sh /entrypoint.sh
