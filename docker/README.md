@@ -2,7 +2,7 @@
 
 The onboard deployment consists of three host-networked ROS 2 containers:
 
-- `control`: only `stingray_planning`;
+- `control`: planning, mission FSM, and their Stingray interfaces/utilities;
 - `zed`: ZED M ROS wrapper with camera and GPU device access;
 - `yolo`: YOLO detector with NVIDIA GPU access. It consumes the ZED ROS topics.
 
@@ -124,13 +124,13 @@ docker compose exec yolo bash
 ```
 
 After editing on the host, rebuild the required overlay inside the container.
-For control/planning:
+For control/planning and missions:
 
 ```bash
 cd /workspace
 source /opt/ros/humble/setup.bash
 colcon build --symlink-install --packages-select \
-  stingray_planning
+  stingray_interfaces stingray_utils stingray_planning stingray_missions
 source install/setup.bash
 ros2 launch stingray_planning planning.launch.py
 ```
