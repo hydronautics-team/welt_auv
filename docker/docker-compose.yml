@@ -34,7 +34,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
     command: >-
-      ros2 launch sauvc_missions gate_usb_test.launch.py
+      ros2 launch sauvc_missions gate_sauvc_2027.launch.py
       control_data_topic:=${GATE_CONTROL_TOPIC:-/control/data_test}
 
   yolo:

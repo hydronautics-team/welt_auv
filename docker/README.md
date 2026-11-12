@@ -139,13 +139,17 @@ Start the FSM scenario with:
 ```bash
 ros2 service call /stingray/services/transition \
   stingray_interfaces/srv/SetTransition \
-  "{transition: gate_usb_test}"
+  "{transition: gate_sauvc_2027}"
 ```
 
-The safe mission parameters limit each visual correction to 0.75 m forward
-and 0.3 m laterally. The final pass command is a 0.75 m relative offset. The
-mission stops on stale detections or timeout and publishes a zero offset when
-leaving either movement state.
+The mission first observes the initial camera sector and then searches with an
+expanding yaw sweep: `+30`, `-30`, `+60`, `-60`, up to 120 degrees from the
+initial heading. Three consecutive `gate` detections are required. The found
+absolute yaw is preserved during centering and passage.
+
+Visual corrections are limited to 0.75 m forward and 0.3 m laterally per
+command. The final pass command is a 2.5 m relative offset. The mission stops
+on stale detections or timeout and publishes a hold setpoint when interrupted.
 
 Before a real run, start `welt_rov`/`stingray_core`, verify fresh odometry and
 put control into automatic mode with all six hold loops enabled:
@@ -156,10 +160,10 @@ ros2 topic pub --once /control/mode std_msgs/msg/UInt8 "{data: 2}"
 ros2 topic pub --once /control/loop_flags std_msgs/msg/UInt8 "{data: 63}"
 ```
 
-Place the vehicle between 2.0 and 2.75 m from the gate before starting. A
-farther detection is rejected instead of repeatedly extending the relative
-position target. First verify that a gate on the image right produces positive
-`linear.y` on `/control/data_test`; the project body convention uses +Y right.
+The gate does not need to be visible at startup. First verify in dry-run that
+the yaw sweep follows the intended direction and that a gate on the image
+right produces positive `linear.y` on `/control/data_test`; the project body
+convention uses +Y right.
 
 Emergency stop:
 

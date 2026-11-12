@@ -60,5 +60,5 @@ echo
 echo "Gate test mode: $mode"
 echo "Control output: $GATE_CONTROL_TOPIC"
 echo "Detections: /stingray/topics/camera/front/bbox_array"
-echo "Start mission with transition: gate_usb_test"
+echo "Start mission with transition: gate_sauvc_2027"
 echo "Logs: docker compose -f docker/docker-compose.yml logs -f gate-test yolo front-camera"
