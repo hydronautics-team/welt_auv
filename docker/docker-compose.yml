@@ -37,6 +37,50 @@ services:
       ros2 launch sauvc_missions gate_sauvc_2027.launch.py
       control_data_topic:=${GATE_CONTROL_TOPIC:-/control/data_test}
 
+  sim-mission:
+    build:
+      context: ..
+      dockerfile: docker/control/Dockerfile
+    image: ${CONTROL_IMAGE:-hydronautics/welt_auv:control}
+    container_name: welt_auv_sim_mission
+    network_mode: host
+    ipc: host
+    restart: unless-stopped
+    profiles: [simulator]
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    command: >-
+      ros2 launch sauvc_missions gate_sim.launch.py
+      synthetic_detections:=${SIM_SYNTHETIC_DETECTIONS:-true}
+
+  sim-yolo:
+    build:
+      context: ..
+      dockerfile: docker/od/Dockerfile.cpu
+    image: ${YOLO_SIM_IMAGE:-hydronautics/welt_auv:yolo-cpu}
+    container_name: welt_auv_sim_yolo
+    network_mode: host
+    ipc: host
+    restart: unless-stopped
+    profiles: [simulator-yolo]
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+      YOLO_WEIGHTS_PATH: /models/yolov8.pt
+    volumes:
+      - ${YOLO_WEIGHTS:-../src/sauvc/src/sauvc_object_detection/weights/yolov8.pt}:/models/yolov8.pt:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: >-
+      ros2 launch welt_launch yolo.launch.py
+      weights_path:=/models/yolov8.pt
+      debug:=${YOLO_DEBUG:-True}
+      image_topic:=/stingray/topics/camera/front
+      camera_info_topic:=/stingray/topics/camera/front/camera_info
+      enabled_on_start:=True
+
   yolo:
     platform: linux/arm64
     build:

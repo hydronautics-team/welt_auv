@@ -174,6 +174,37 @@ ros2 topic pub --once /control/mode std_msgs/msg/UInt8 "{data: 0}"
 docker compose -f docker/docker-compose.yml --profile gate-test stop gate-test
 ```
 
+## Gazebo gate mission
+
+Start the Stingray-compatible Gazebo simulator first:
+
+```bash
+cd ~/Hydronautics/simulator
+SIM_GUI=true ./run-stingray-sim.sh
+```
+
+Run the mission with deterministic bboxes (FSM/control regression mode):
+
+```bash
+cd ~/Hydronautics/welt_auv
+./docker/run-simulator-mission.sh --synthetic
+```
+
+For real inference, put a YOLOv8 model with a `gate` class at the default
+path or specify it explicitly. The workstation image is CPU-only and works on
+x86_64; the Jetson `yolo` service remains unchanged:
+
+```bash
+YOLO_WEIGHTS=/absolute/path/gate.pt \
+  ./docker/run-simulator-mission.sh --yolo
+```
+
+Both modes wait for `/core/state/odometry` and request the
+`gate_sauvc_2027` transition automatically. Set `SIM_START_MISSION=false` to
+start the containers without triggering the FSM. The real detector consumes
+`/stingray/topics/camera/front` directly and publishes
+`/stingray/topics/camera/front/bbox_array`; no remapping is used.
+
 ## Development mode
 
 Container image layers are immutable. For editing, the development override
