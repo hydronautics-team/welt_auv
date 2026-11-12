@@ -119,17 +119,20 @@ Container image layers are immutable. For editing, the development override
 mounts this repository at `/workspace` and keeps the containers running:
 
 ```bash
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-docker compose exec control bash
+./docker/dev-control.sh
 docker compose exec yolo bash
 ```
+
+The control helper starts the development container, opens the shell in
+`/workspace`, sources ROS and the workspace overlay, and uses
+`ROS_DOMAIN_ID=1` by default. The pool planner launch also publishes the static
+`map -> odom` transform. Set `publish_map_odom_tf:=false` only when another
+localization component already publishes that transform.
 
 After editing on the host, rebuild the required overlay inside the container.
 For control/planning and missions:
 
 ```bash
-cd /workspace
-source /opt/ros/humble/setup.bash
 colcon build --symlink-install --packages-select \
   stingray_interfaces stingray_utils stingray_planning stingray_missions
 source install/setup.bash
