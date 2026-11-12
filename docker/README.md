@@ -190,6 +190,13 @@ cd ~/Hydronautics/welt_auv
 ./docker/run-simulator-mission.sh --synthetic
 ```
 
+Normal runs reuse the existing images. Rebuild only after changing source or
+Docker dependencies:
+
+```bash
+./docker/run-simulator-mission.sh --synthetic --build
+```
+
 For real inference, put a YOLOv8 model with a `gate` class at the default
 path or specify it explicitly. The workstation image is CPU-only and works on
 x86_64; the Jetson `yolo` service remains unchanged:

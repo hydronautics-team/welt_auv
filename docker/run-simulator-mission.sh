@@ -5,9 +5,25 @@ script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 cd "$script_dir"
 
 export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-1}"
-mode="${1:---synthetic}"
+mode="--synthetic"
+rebuild=false
 services=(sim-mission)
 profiles=(--profile simulator)
+
+for argument in "$@"; do
+  case "$argument" in
+    --synthetic|--yolo)
+      mode="$argument"
+      ;;
+    --build)
+      rebuild=true
+      ;;
+    *)
+      echo "Usage: $0 [--synthetic|--yolo] [--build]" >&2
+      exit 2
+      ;;
+  esac
+done
 
 case "$mode" in
   --synthetic)
@@ -24,13 +40,11 @@ case "$mode" in
     profiles+=(--profile simulator-yolo)
     services+=(sim-yolo)
     ;;
-  *)
-    echo "Usage: $0 [--synthetic|--yolo]" >&2
-    exit 2
-    ;;
 esac
 
-docker compose "${profiles[@]}" build "${services[@]}"
+if [[ "$rebuild" == "true" ]]; then
+  docker compose "${profiles[@]}" build "${services[@]}"
+fi
 docker compose "${profiles[@]}" up -d --force-recreate "${services[@]}"
 docker compose "${profiles[@]}" ps "${services[@]}"
 
