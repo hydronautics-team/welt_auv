@@ -179,8 +179,8 @@ docker compose -f docker/docker-compose.yml --profile gate-test stop gate-test
 Start the Stingray-compatible Gazebo simulator first:
 
 ```bash
-cd ~/Hydronautics/simulator
-SIM_GUI=true ./run-stingray-sim.sh
+cd ~/Hydronautics/sauvc_simulation_assets
+SIM_GUI=true ./run-simulator.sh
 ```
 
 Run the mission with deterministic bboxes (FSM/control regression mode):

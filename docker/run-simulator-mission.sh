@@ -55,7 +55,7 @@ if [[ "${SIM_START_MISSION:-true}" == "true" ]]; then
       source /welt_auv/install/setup.bash
       timeout 30 ros2 topic echo /core/state/odometry nav_msgs/msg/Odometry --once >/dev/null
     '; then
-    echo "No /core/state/odometry. Start ~/Hydronautics/simulator/run-stingray-sim.sh first." >&2
+    echo "No /core/state/odometry. Start ~/Hydronautics/sauvc_simulation_assets/run-simulator.sh first." >&2
     exit 3
   fi
   docker compose "${profiles[@]}" exec -T sim-mission bash -lc '
