@@ -10,25 +10,34 @@ if [[ -f .env ]]; then
   set +a
 fi
 
-mode="${1:---dry-run}"
-case "$mode" in
-  --dry-run)
-    export GATE_CONTROL_TOPIC=/control/data_test
-    ;;
-  --real)
-    if [[ "${GATE_REAL_CONTROL:-}" != "YES" ]]; then
-      echo "Real gate control requires GATE_REAL_CONTROL=YES." >&2
-      echo "Run the dry test first, then use:" >&2
-      echo "  GATE_REAL_CONTROL=YES ./docker/run-gate-test.sh --real" >&2
+mode=--dry-run
+build=false
+for argument in "$@"; do
+  case "$argument" in
+    --dry-run|--real)
+      mode="$argument"
+      ;;
+    --build)
+      build=true
+      ;;
+    *)
+      echo "Usage: $0 [--dry-run|--real] [--build]" >&2
       exit 2
-    fi
-    export GATE_CONTROL_TOPIC=/control/data
-    ;;
-  *)
-    echo "Usage: $0 [--dry-run|--real]" >&2
+      ;;
+  esac
+done
+
+if [[ "$mode" == "--real" ]]; then
+  if [[ "${GATE_REAL_CONTROL:-}" != "YES" ]]; then
+    echo "Real gate control requires GATE_REAL_CONTROL=YES." >&2
+    echo "Run the dry test first, then use:" >&2
+    echo "  GATE_REAL_CONTROL=YES ./docker/run-gate-test.sh --real" >&2
     exit 2
-    ;;
-esac
+  fi
+  export GATE_CONTROL_TOPIC=/control/data
+else
+  export GATE_CONTROL_TOPIC=/control/data_test
+fi
 
 weights_path="${YOLO_WEIGHTS:-../src/sauvc/src/sauvc_object_detection/weights/yolov8.pt}"
 camera_device="${USB_CAMERA_DEVICE:-/dev/video0}"
@@ -49,8 +58,11 @@ export FRONT_CAMERA_IMAGE_TOPIC=/stingray/topics/camera/front
 export FRONT_CAMERA_INFO_TOPIC=/stingray/topics/camera/front/camera_info
 
 docker compose stop control zed
-docker compose --profile gate-test build gate-test
+if [[ "$build" == true ]]; then
+  docker compose --profile gate-test build gate-test
+fi
 docker compose --profile usb-camera --profile gate-test up -d \
+  --no-build --pull never \
   front-camera yolo gate-test
 
 docker compose --profile usb-camera --profile gate-test ps \
@@ -58,6 +70,7 @@ docker compose --profile usb-camera --profile gate-test ps \
 
 echo
 echo "Gate test mode: $mode"
+echo "Build images: $build"
 echo "Control output: $GATE_CONTROL_TOPIC"
 echo "Detections: /stingray/topics/camera/front/bbox_array"
 echo "Start mission with transition: gate_sauvc_2027"

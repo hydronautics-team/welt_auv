@@ -1,0 +1,14 @@
+ARG CONTROL_BASE_IMAGE=hydronautics/welt_auv:control
+FROM ${CONTROL_BASE_IMAGE}
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+WORKDIR /welt_auv
+COPY . /welt_auv
+
+RUN source /opt/ros/humble/setup.bash && \
+    if [[ -f /additional_packages/install/setup.bash ]]; then \
+      source /additional_packages/install/setup.bash; \
+    fi && \
+    colcon build \
+      --packages-select sauvc_missions \
+      --cmake-args -DCMAKE_BUILD_TYPE=Release

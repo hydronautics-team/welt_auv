@@ -37,6 +37,28 @@ services:
       ros2 launch sauvc_missions gate_sauvc_2027.launch.py
       control_data_topic:=${GATE_CONTROL_TOPIC:-/control/data_test}
 
+  visible-flare-test:
+    build:
+      context: ..
+      dockerfile: docker/control/Dockerfile.incremental
+      args:
+        CONTROL_BASE_IMAGE: ${CONTROL_IMAGE:-hydronautics/welt_auv:control}
+    image: ${FLARE_CONTROL_IMAGE:-hydronautics/welt_auv:control-flare}
+    container_name: welt_auv_visible_flare_test
+    network_mode: host
+    ipc: host
+    privileged: true
+    restart: unless-stopped
+    profiles: [visible-flare-test]
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
+      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    command: >-
+      ros2 launch sauvc_missions visible_flare_test.launch.py
+      control_data_topic:=${FLARE_CONTROL_TOPIC:-/control/data_test}
+
   sim-mission:
     build:
       context: ..
