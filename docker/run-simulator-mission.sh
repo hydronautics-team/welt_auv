@@ -30,6 +30,12 @@ case "$mode" in
     export SIM_SYNTHETIC_DETECTIONS=true
     ;;
   --yolo)
+    if ! command -v nvidia-smi >/dev/null 2>&1 || \
+       ! nvidia-smi -L >/dev/null 2>&1; then
+      echo "NVIDIA GPU is present but its driver is unavailable." >&2
+      echo "Fix nvidia-smi and install NVIDIA Container Toolkit before using --yolo." >&2
+      exit 4
+    fi
     weights_path="${YOLO_WEIGHTS:-../src/sauvc/src/sauvc_object_detection/weights/yolov8.pt}"
     if [[ ! -r "$weights_path" ]]; then
       echo "YOLO weights are missing: $weights_path" >&2

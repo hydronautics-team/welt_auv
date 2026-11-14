@@ -44,31 +44,42 @@ services:
     image: ${CONTROL_IMAGE:-hydronautics/welt_auv:control}
     container_name: welt_auv_sim_mission
     network_mode: host
-    ipc: host
+    mem_limit: ${SIM_MISSION_MEMORY_LIMIT:-4g}
     restart: unless-stopped
     profiles: [simulator]
     environment:
       ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
-      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      CYCLONEDDS_URI: >-
+        <CycloneDDS><Domain><General><Interfaces><NetworkInterface
+        name="lo"/></Interfaces><AllowMulticast>true</AllowMulticast></General></Domain></CycloneDDS>
     volumes:
       - /etc/localtime:/etc/localtime:ro
     command: >-
       ros2 launch sauvc_missions gate_sim.launch.py
       synthetic_detections:=${SIM_SYNTHETIC_DETECTIONS:-true}
+      gate_x:=${SIM_GATE_X:-8.0}
+      gate_y:=${SIM_GATE_Y:-6.0}
 
   sim-yolo:
     build:
       context: ..
-      dockerfile: docker/od/Dockerfile.cpu
-    image: ${YOLO_SIM_IMAGE:-hydronautics/welt_auv:yolo-cpu}
+      dockerfile: docker/od/Dockerfile.gpu
+    image: ${YOLO_SIM_IMAGE:-hydronautics/welt_auv:yolo-gpu}
     container_name: welt_auv_sim_yolo
     network_mode: host
-    ipc: host
+    mem_limit: ${SIM_YOLO_MEMORY_LIMIT:-8g}
+    gpus: all
     restart: unless-stopped
     profiles: [simulator-yolo]
     environment:
       ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-1}
-      RMW_IMPLEMENTATION: ${RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      CYCLONEDDS_URI: >-
+        <CycloneDDS><Domain><General><Interfaces><NetworkInterface
+        name="lo"/></Interfaces><AllowMulticast>true</AllowMulticast></General></Domain></CycloneDDS>
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
       YOLO_WEIGHTS_PATH: /models/yolov8.pt
     volumes:
       - ${YOLO_WEIGHTS:-../src/sauvc/src/sauvc_object_detection/weights/yolov8.pt}:/models/yolov8.pt:ro
@@ -80,6 +91,8 @@ services:
       image_topic:=/stingray/topics/camera/front
       camera_info_topic:=/stingray/topics/camera/front/camera_info
       enabled_on_start:=True
+      device:=cuda:0
+      require_cuda:=True
 
   yolo:
     platform: linux/arm64
